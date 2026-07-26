@@ -1,6 +1,7 @@
 ---
 name: personwise-create-course
 description: Create, refine, resume, publish, or query polished PersonWise courses from topics, text, PDF/PPTX/DOCX/Markdown/TXT documents, or reference images through the paired OAuth MCP. Use for staged course authoring, source-grounded lessons, slide and narration review, visual QA, presenter selection, layout configuration, link sharing, or Topics review submission.
+license: MIT
 ---
 
 # Create a PersonWise course
