@@ -87,26 +87,27 @@ The consent page shows the Agent/client name and redirect host. Localhost or unv
 receive a prominent warning. Do not dismiss or reinterpret that warning; let the user decide
 whether they recognize the client.
 
-The user chooses:
+The user chooses one active PersonWise organization and then authorizes or denies the connection.
+The public OAuth request contains one permission, `courses:manage`. It covers the complete ordinary
+course workflow in that organization: create/read/generate/edit, owned-course discovery, document
+and image upload, presenter and configuration work, first publish, link access, and Topics-review
+submission.
 
-- one active PersonWise organization;
-- a positive course-count limit or `Unlimited`;
-- the requested creation capabilities;
-- a publication ceiling of draft, private, or link;
-- optional Topics-review submission permission.
+Explain the boundary precisely:
 
-Explain the defaults precisely:
+- Each new course still consumes one organization course credit and remains subject to concurrency
+  and rate limits.
+- Link access is technically `unlisted` and noindex. Topics submission starts a separate review; it
+  never approves or directly publishes platform-wide content.
+- Billing, organization administration, course deletion or transfer, Topics approval, and direct
+  platform-public publication are excluded.
+- Access tokens last 15 minutes. The client rotates refresh tokens in its own credential store; an
+  unused connection expires after one year, while an actively used authorization remains durable.
+- The user can revoke the connection from Connected Agents at any time.
 
-- `Unlimited` removes an additional lifetime connection count limit; each new course still consumes
-  one organization course credit and remains subject to concurrency and rate limits.
-- `link` means link-accessible, technically `unlisted`, and noindex. It does not list the course in
-  Topics, hubs, sitemaps, or search.
-- The Agent can always request a narrower final result than the ceiling.
-- Expanding scopes or the ceiling requires new consent. Revocation and narrowing take effect on
-  subsequent tool use.
-
-Do not submit a different organization, user identity, scope set, course limit, or ceiling through
-MCP tool arguments. Those values come only from the approved OAuth authorization.
+Do not ask for a second authorization when an ordinary course step becomes necessary. One grant is
+bound to one organization; the same Agent may connect to another organization through a separate
+authorization. Do not submit a different organization or user identity through MCP tool arguments.
 
 ## Prove readiness before creating
 
@@ -116,7 +117,7 @@ Read `personwise://course-agent/capabilities` when the host supports resources; 
 ```text
 capabilities.resource == "https://mcp.personwise.ai/mcp"
 capabilities.contract_version has compatible major version 1
-capabilities.minimum_skill_version <= "1.0.0"
+capabilities.minimum_skill_version <= "1.1.0"
 minimum_remote_mcp_version is supported by the connected server
 ```
 
@@ -150,8 +151,8 @@ Do not consume course credit when contract compatibility or a required capabilit
 | Discovery or redirect is still pending | Incomplete OAuth | Resume the client's authorization flow; preserve client PKCE/state; do not call create yet. |
 | 401 before first success | Missing/invalid resource token or incomplete consent | Reconnect through OAuth and verify the exact MCP resource. |
 | 401 after a working connection | Revoked, expired, replaced, or otherwise invalid grant/token | Let the client refresh once; if still rejected, reauthorize. Do not extract or paste tokens. |
-| 403 or `course_agent_mcp_insufficient_scope` | Valid connection lacks a required capability | Keep narrower work within scope or ask the user whether to start new consent for the added capability. Do not retry unchanged. |
-| Target-above-ceiling error | Requested completion exceeds consent | Narrow the target or obtain new consent; never silently widen or clamp it. |
+| 403 or `course_agent_mcp_insufficient_scope` | The connection is legacy-limited, stale, or mismatched with the current contract | Refresh once; if it remains limited, start one fresh full-course authorization. Do not request capability-by-capability consent. |
+| Target-above-ceiling error | A legacy-limited connection cannot complete the requested target | Start one fresh full-course authorization; never silently change the requested result. |
 | Capability version/tool mismatch | Skill and server are not a safe pair | Stop before creation and update the Skill/connection. |
 | 429 | Connection/tool rate limit | Honor `Retry-After`; do not parallel-hammer. |
 

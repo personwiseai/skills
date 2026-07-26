@@ -10,7 +10,7 @@ Use the paired PersonWise Course Creation MCP as a staged authoring system. Prod
 ordinary PersonWise course per create call, review it at its stable checkpoints, and finish the
 result authorized by the user's OAuth connection.
 
-This Skill implements public contract and Skill version `1.0.0`.
+This Skill implements public contract and Skill version `1.1.0`.
 
 ## Read the relevant references
 
@@ -38,7 +38,7 @@ Require all of the following:
 - every tool needed for the requested workflow in `supported_tools`;
 - the relevant upload/image capability for any requested document or visual operation.
 
-Stop before creation when the server requires a Skill newer than `1.0.0`, its contract major is
+Stop before creation when the server requires a Skill newer than `1.1.0`, its contract major is
 incompatible, or a required tool is absent. If the MCP itself is missing, use the bundled
 connection reference; do not send the user to a separate installation site.
 
@@ -54,13 +54,13 @@ narrower result, proceed autonomously through:
 - Reference or Pin attachment when supplied;
 - image generation and the capability-aware visual branch;
 - presenter, Voice, and layout configuration;
-- first publish and the grant-derived final target;
+- first publish and the user-requested final target;
 - completion verification.
 
-Do not repeatedly ask the user to approve internal checkpoints. The connection's publication
-ceiling is an upper bound, not authority to exceed the request. A requested draft or private result
-stays draft or private. A normal omitted target resolves to the connection default, commonly
-link-accessible and noindex.
+Do not repeatedly ask the user to approve internal checkpoints or ordinary course capabilities.
+The OAuth connection grants the complete ordinary course workflow, but it is not authority to
+exceed the user's request. A requested draft or private result stays draft or private. A normal
+omitted target resolves to link-accessible and noindex.
 
 Stop for user input only when a real blocker remains: required OAuth authorization, insufficient
 course credit, an unrecoverable or missing source, a material product choice with multiple valid
@@ -84,9 +84,8 @@ Choose one primary lane:
 - **Query:** search bounded metadata with `list_courses`; use `get_course` or
   `get_authoring_snapshot` only when needed and authorized.
 
-For multiple courses, create one durable run per course. “Unlimited” consent removes an additional
-connection count ceiling; it does not turn one call into an unbounded batch or bypass credits,
-concurrency, and rate limits.
+For multiple courses, create one durable run per course. Full course access does not turn one call
+into an unbounded batch or bypass credits, concurrency, and rate limits.
 
 ## Drive the production sequence
 

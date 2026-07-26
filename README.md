@@ -32,7 +32,7 @@ do not put API keys or access tokens in this repository.
 ## Current release
 
 - Skill: `personwise-create-course`
-- Version: `1.0.0`
+- Version: `1.1.0`
 - Install page: https://personwise.ai/skills/personwise-create-course
 - Support: support@personwise.ai
 - Privacy: https://personwise.ai/privacy

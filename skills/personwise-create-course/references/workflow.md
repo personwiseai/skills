@@ -65,9 +65,9 @@ Call `create_course` once with:
 - normally `stop_after=outline_ready`;
 - an explicit narrower `distribution_target` only when the user requests one.
 
-Omit `distribution_target` to use the OAuth grant's completion default. Normal link consent resolves
-to a final link-accessible `unlisted` course, but the current grant may instead default to draft or
-private. The server rejects a target above its publication ceiling.
+Omit `distribution_target` to use the normal link-accessible completion default. The public
+`courses:manage` grant supports draft, private, link-accessible completion, and an explicit Topics
+review submission; it never grants Topics approval or direct platform-public distribution.
 
 Immediately save the returned run ID, then call `get_run`. Do not infer the first legal action only
 from the create response.
@@ -263,7 +263,7 @@ Confirm:
 - no unresolved content/source/safety finding;
 - every slide image is canonically complete;
 - presenter/Voice and requested configuration persist;
-- the desired target remains within the grant;
+- the desired target remains within the normal non-administrative course workflow;
 - `first_publish` or `continue` is freshly allowed.
 
 Visual review may be `not_performed`; that is honest evidence and not a server permission gate.
@@ -283,7 +283,7 @@ Target behavior:
 - **draft**: finish generation/configuration and leave unpublished.
 - **private**: first-publish and keep `private`.
 - **link**: first-publish, set `unlisted`, and verify link playability.
-- **topics_review**: require explicit user request and scope, complete link access, then submit.
+- **topics_review**: require an explicit user request, complete link access, then submit for review.
 
 For Topics submission, `message` is optional and should explain the review request concisely.
 `advisory_hub_id` is only a non-binding hint when a real known ID was supplied; never invent it.
@@ -322,9 +322,8 @@ cursor
 Time windows are half-open and timezone-aware. Sort supports `created_at`, `updated_at`,
 `first_published_at`, or `name`; direction is `asc` or `desc`; limit is 1–100.
 
-Default `origin=integration`. `owned` or `all` requires the separately consented owned-course
-discovery permission and remains metadata-only for courses outside this authorization's mutable
-boundary.
+Default `origin=integration`. The public `courses:manage` connection also permits `owned` or `all`
+metadata discovery. Courses outside this authorization's mutable boundary remain metadata-only.
 
 When following an opaque cursor, preserve every original filter, origin, sort, and direction. Do
 not invent offsets or an exact total. Use `get_course` for one bounded metadata record and
@@ -336,8 +335,8 @@ not invent offsets or an exact total. Use `get_course` for one bounded metadata 
 |---|---|
 | Lost response or timeout | Read fresh state, then replay the exact payload with the same idempotency key only when state does not already prove completion. |
 | Revision conflict | Fetch a fresh snapshot/configuration, merge real changes, and use a new key for a changed payload. |
-| 401 | Let the client refresh once; if rejected, reauthorize through OAuth, then read state before resuming. |
-| 403 / insufficient scope | Continue only within existing scope or obtain user-approved new consent; do not retry unchanged. |
+| 401 | Let the client rotate its refresh token once; if rejected, reauthorize through OAuth, then read state before resuming. |
+| 403 / insufficient scope | For `courses:manage`, treat a normal workflow scope failure as a revoked/invalid connection or contract defect; do not ask for another incremental permission. A legacy limited grant may be replaced once with the current full-access consent. |
 | Insufficient credit | Stop and report the exact organization credit blocker; do not purchase automatically. |
 | Source not ready | Poll, then use `retry_source` or `detach_source` only when allowed. |
 | Pin unsupported | Stop for an explicit product choice; do not downgrade silently. |
