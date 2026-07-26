@@ -1,0 +1,40 @@
+{
+  "name": "personwise-create-course",
+  "version": "1.0.0",
+  "description": "Create polished, interactive PersonWise courses from a topic or materials.",
+  "author": {
+    "name": "PersonWise",
+    "email": "support@personwise.ai",
+    "url": "https://personwise.ai"
+  },
+  "homepage": "https://personwise.ai/skills/personwise-create-course",
+  "repository": "https://github.com/personwiseai/skills",
+  "keywords": [
+    "course-creation",
+    "education",
+    "presentations",
+    "digital-human",
+    "mcp"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Create a PersonWise Course",
+    "shortDescription": "Create polished, interactive courses from a topic or materials.",
+    "longDescription": "Turn a topic, text, or source documents into a reviewed PersonWise course with narration, visuals, a digital-human presenter, voice Q&A, and a shareable result.",
+    "developerName": "PersonWise",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://personwise.ai/skills/personwise-create-course",
+    "privacyPolicyURL": "https://personwise.ai/privacy",
+    "termsOfServiceURL": "https://personwise.ai/terms",
+    "defaultPrompt": [
+      "Create a polished course from my topic or materials.",
+      "Resume and finish my PersonWise course.",
+      "Review and improve my course before publishing."
+    ]
+  }
+}

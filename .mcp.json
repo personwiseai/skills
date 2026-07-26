@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "personwise-course-creation": {
+      "type": "http",
+      "url": "https://mcp.personwise.ai/mcp"
+    }
+  }
+}
