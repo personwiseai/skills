@@ -136,7 +136,15 @@ its new revision.
 ## Advance to and review `script_ready`
 
 Call `get_run` again. If `continue` remains allowed, call `advance_run` with the latest revision and
-a new key. Poll until `paused / script_ready`.
+a new key. The remote MCP completes one model operation (one Page text or one Narration) in each
+bounded call so it stays below common Agent-host tool timeouts. After every call:
+
+1. call `get_run`;
+2. if state is `waiting / outline_ready` and `continue` remains allowed, call `advance_run` again
+   with a new key;
+3. stop the loop at `paused / script_ready`, a safe error, cancellation, or loss of `continue`.
+Do not merely poll an unchanged `waiting / outline_ready` run, and do not issue concurrent
+advances.
 
 Fetch a new authoring snapshot and inspect every aligned:
 
@@ -197,7 +205,8 @@ Check both:
 If both are true:
 
 1. Call `get_slide_preview` for every zero-based slide index.
-2. Load the returned protected resource/image content.
+2. Inspect the MCP-native image content returned by the tool. If the Agent host exposes only its
+   resource link, load that protected resource instead.
 3. Apply the full-deck review in `visual-quality.md`.
 4. Fix content first where needed, then call `get_run` and `get_authoring_snapshot` again.
 5. Call `regenerate_slide_images` once with the complete failed index subset, that fresh snapshot's
@@ -227,16 +236,18 @@ structured completion state, continue the authorized workflow, and record `not_p
 
 ## Cast the presenter and configure the course
 
-Call `list_presenters` with the project's concrete language and only relevant optional appearance
-filters. Require:
+Call `list_presenters` with the project's concrete language, a bounded `limit` (maximum 20), an
+`offset`, and only relevant optional appearance filters. Page through `total` only as needed; do
+not inject the entire unfiltered catalog into one Agent turn. Require:
 
 - `is_profile_complete=true`;
 - exactly compatible target-language `voice_defaults`;
 - the selected mapping has `is_ready=true`;
 - an exact backend and `voice_id` or `voice_plane_voice_id`.
 
-With vision, call `get_presenter_preview` for every serious candidate and inspect the protected
-image plus the exact mapping. Use appearance metadata only as observable casting information; never
+With vision, call `get_presenter_preview` for every serious candidate and inspect its MCP-native
+image plus the exact mapping. If the Agent host does not expose inline image content, inspect the
+protected resource instead. Use appearance metadata only as observable casting information; never
 infer biography, nationality, identity, or personality.
 
 Without vision, make no appearance claims. Use structured language/Voice readiness and a deliberate

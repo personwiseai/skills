@@ -1,9 +1,9 @@
 # Connect and authorize the PersonWise Course Creation MCP
 
-## Use the bundled dependency first
+## Use one standalone MCP connection
 
-The Skill and MCP are one product. Prefer the host Agent's native Skill dependency installer, which
-reads `agents/openai.yaml` and registers:
+The PersonWise MCP is a complete standalone product. No Skill is required. When this optional Skill
+is installed, its dependency metadata may register the same MCP automatically:
 
 ```text
 identifier: personwise-course-creation
@@ -15,11 +15,11 @@ Verify that exact HTTPS URL. Do not substitute the main PersonWise API, an Auth 
 or a guessed regional endpoint. Do not request, issue, store, or rotate a PersonWise API key. The
 public remote connection authenticates with OAuth.
 
-After dependency installation, call `get_course_agent_capabilities` or read
-`personwise://course-agent/capabilities`. If either works and the contract is compatible, setup is
-complete; do not add a duplicate server entry.
+After connection, call `get_course_agent_capabilities` or read
+`personwise://course-agent/capabilities`. If either works and the required tools are present, setup
+is complete; do not add a duplicate server entry.
 
-## Configure a host without Skill dependency support
+## Configure the MCP directly
 
 Use the host's documented **remote MCP** or **custom connector** UI when available. Create one entry
 named `personwise-course-creation`, select Streamable HTTP, and enter only:
@@ -117,8 +117,6 @@ Read `personwise://course-agent/capabilities` when the host supports resources; 
 ```text
 capabilities.resource == "https://mcp.personwise.ai/mcp"
 capabilities.contract_version has compatible major version 1
-capabilities.minimum_skill_version <= "1.1.0"
-minimum_remote_mcp_version is supported by the connected server
 ```
 
 Compare `supported_tools` with the operations needed for the request. At minimum, normal staged
@@ -141,7 +139,8 @@ Add upload, visual, configuration, visibility, query, or Topics tools only as th
 workflow requires them. Check `supports_machine_upload`, `supports_browser_upload`,
 `supports_image_content`, and `supports_protected_image_resources` rather than assuming them.
 
-Do not consume course credit when contract compatibility or a required capability is unresolved.
+Do not consume course credit when MCP contract compatibility or a required capability is
+unresolved. Skill presence and Skill version are never compatibility inputs.
 
 ## Diagnose connection failures
 
@@ -153,7 +152,7 @@ Do not consume course credit when contract compatibility or a required capabilit
 | 401 after a working connection | Revoked, expired, replaced, or otherwise invalid grant/token | Let the client refresh once; if still rejected, reauthorize. Do not extract or paste tokens. |
 | 403 or `course_agent_mcp_insufficient_scope` | The connection is legacy-limited, stale, or mismatched with the current contract | Refresh once; if it remains limited, start one fresh full-course authorization. Do not request capability-by-capability consent. |
 | Target-above-ceiling error | A legacy-limited connection cannot complete the requested target | Start one fresh full-course authorization; never silently change the requested result. |
-| Capability version/tool mismatch | Skill and server are not a safe pair | Stop before creation and update the Skill/connection. |
+| Required MCP tool is absent | The connected server cannot complete that requested workflow | Stop only the affected workflow and report the missing tool. Do not require or upgrade a Skill. |
 | 429 | Connection/tool rate limit | Honor `Retry-After`; do not parallel-hammer. |
 
 After reconnection, repeat the capability read. For an existing course task, call the relevant

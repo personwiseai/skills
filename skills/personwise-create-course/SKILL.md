@@ -6,11 +6,12 @@ license: MIT
 
 # Create a PersonWise course
 
-Use the paired PersonWise Course Creation MCP as a staged authoring system. Produce one durable,
+Use the PersonWise Course Creation MCP as a staged authoring system. Produce one durable,
 ordinary PersonWise course per create call, review it at its stable checkpoints, and finish the
 result authorized by the user's OAuth connection.
 
-This Skill implements public contract and Skill version `1.1.0`.
+This Skill is an optional quality playbook. The PersonWise MCP is complete and usable without this
+Skill, and Skill presence or version must never gate an MCP operation.
 
 ## Read the relevant references
 
@@ -23,10 +24,10 @@ Before a mutating course task:
    uses images or the current Agent can consume MCP image/resource content.
 
 Read [references/connection-and-auth.md](references/connection-and-auth.md) completely when the
-paired MCP is absent, OAuth is incomplete, capability readiness is unproven, or authorization has
+MCP is absent, OAuth is incomplete, capability readiness is unproven, or authorization has
 failed. For a query-only request, read connection/auth and the query section of `workflow.md`.
 
-## Verify the paired capability first
+## Verify the MCP capability first
 
 Before any credit-consuming action, read `personwise://course-agent/capabilities` or call
 `get_course_agent_capabilities`.
@@ -34,13 +35,14 @@ Before any credit-consuming action, read `personwise://course-agent/capabilities
 Require all of the following:
 
 - resource `https://mcp.personwise.ai/mcp`;
-- a compatible `contract_version` and `minimum_skill_version`;
+- a compatible MCP `contract_version`;
 - every tool needed for the requested workflow in `supported_tools`;
 - the relevant upload/image capability for any requested document or visual operation.
 
-Stop before creation when the server requires a Skill newer than `1.1.0`, its contract major is
-incompatible, or a required tool is absent. If the MCP itself is missing, use the bundled
-connection reference; do not send the user to a separate installation site.
+Stop before creation only when the MCP contract major is incompatible or a tool required for the
+requested workflow is absent. Never compare, require, or upgrade a Skill version. If the MCP itself
+is missing, use the bundled connection reference; do not send the user to a separate installation
+site.
 
 ## Default to authorized end-to-end production
 
@@ -123,7 +125,11 @@ At `outline_ready`, inspect every title and Key-point set for one clear teaching
 coverage, factual support, and non-repetition. Apply the smallest objective corrections with
 `update_slides`, then fetch a fresh snapshot and revision.
 
-Advance to `script_ready`. Review every aligned set:
+Advance toward `script_ready`. Narration is deliberately bounded to one model operation (Page text
+or Narration) per MCP mutation. After each `advance_run`, fetch `get_run`; while the run remains
+`waiting / outline_ready` with `continue` allowed, call `advance_run` again with a new
+idempotency key. Do not merely poll an unchanged waiting run. At `paused / script_ready`, review
+every aligned set:
 
 ```text
 title + key_points -> what the page teaches
@@ -142,7 +148,8 @@ ambiguous upload before issuing another ticket.
 Advance from the freshest revision and poll with bounded backoff until every slide has canonical
 image state and the run reaches `image_ready`.
 
-- If the Agent can consume the protected image content, inspect every slide and every serious
+- If the Agent can consume the MCP-native image content (or its protected-resource fallback),
+  inspect every slide and every serious
   presenter candidate according to `visual-quality.md`. Correct content first, then regenerate the
   complete failed subset with concrete per-slide `slide_instructions`; do not blindly redraw.
   Re-inspect changed slides. After any content correction, call `get_run` and
@@ -154,9 +161,11 @@ Use a reviewed replacement only when a human or vision-capable Agent genuinely r
 
 ### 5. Configure and finish
 
-Use `list_presenters` and exact target-language Voice mappings. With vision, use
-`get_presenter_preview` to cast deliberately; without vision, use structured compatibility and
-make no appearance claims. Apply one compatible pair with `select_presenter`.
+Use paginated `list_presenters` results with bounded pages and exact target-language Voice
+mappings. With vision, use the MCP-native image from `get_presenter_preview` to cast deliberately,
+or read its protected resource when inline image content is unavailable; without vision, use
+structured compatibility and make no appearance claims. Apply one compatible pair with
+`select_presenter`.
 
 After selection, re-read the run and authoring snapshot, then read configuration. Use
 revision-checked `update_course_configuration` only for a requested layout change. Verify the
