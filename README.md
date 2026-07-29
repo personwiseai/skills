@@ -28,17 +28,28 @@ connection together:
 /plugin install personwise-create-course@personwise
 ```
 
-The optional Skill points to the same standalone MCP. Authentication uses browser-based OAuth; do
+Scenario-specific playbooks:
+
+### Interactive Product Explainer
+
+Product videos are expensive and one-way. Turn verified product materials into a five-page interactive PersonWise explainer visitors can ask questions and embed on a website, without inventing UI, features, customers, pricing, integrations, metrics, or roadmap.
+
+```bash
+npx skills add personwiseai/skills --skill personwise-interactive-product-explainer
+```
+
+The optional Skills point to the same standalone MCP. Authentication uses browser-based OAuth; do
 not put API keys or access tokens in this repository. Skill presence or version never gates an MCP
 operation.
 
 ## Current release
 
-- Skill: `personwise-create-course`
-- Version: `1.1.1`
+- Bundle: `1.2.0`
+- Tag: `v1.2.0`
+- Core Skill: `personwise-create-course` `1.1.1`
 - Install page: https://personwise.ai/skills/personwise-create-course
 - Support: support@personwise.ai
 - Privacy: https://personwise.ai/privacy
 - Terms: https://personwise.ai/terms
 
-Each release is tagged and accompanied by a SHA-256 checksum for its packaged `.skill` artifact.
+Each Skill release has a deterministic `.skill` archive and SHA-256 checksum.

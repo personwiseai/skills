@@ -1,0 +1,13 @@
+interface:
+  display_name: "Interactive Product Explainer"
+  short_description: "Build an askable five-page website product explainer."
+  default_prompt: "Use $personwise-interactive-product-explainer to create a source-grounded interactive product explainer for this product."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "personwise-course-creation"
+      description: "Create and publish PersonWise courses with OAuth"
+      transport: "streamable_http"
+      url: "https://mcp.personwise.ai/mcp"
+policy:
+  allow_implicit_invocation: true
