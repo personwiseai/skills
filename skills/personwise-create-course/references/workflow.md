@@ -346,7 +346,7 @@ not invent offsets or an exact total. Use `get_course` for one bounded metadata 
 |---|---|
 | Lost response or timeout | Read fresh state, then replay the exact payload with the same idempotency key only when state does not already prove completion. |
 | Revision conflict | Fetch a fresh snapshot/configuration, merge real changes, and use a new key for a changed payload. |
-| 401 | Let the client rotate its refresh token once; if rejected, reauthorize through OAuth, then read state before resuming. |
+| 401 | Let the client refresh once; if rejected, reauthorize through OAuth, then read state before resuming. |
 | 403 / insufficient scope | For `courses:manage`, treat a normal workflow scope failure as a revoked/invalid connection or contract defect; do not ask for another incremental permission. A legacy limited grant may be replaced once with the current full-access consent. |
 | Insufficient credit | Stop and report the exact organization credit blocker; do not purchase automatically. |
 | Source not ready | Poll, then use `retry_source` or `detach_source` only when allowed. |

@@ -13,6 +13,10 @@ result authorized by the user's OAuth connection.
 This Skill is an optional quality playbook. The PersonWise MCP is complete and usable without this
 Skill, and Skill presence or version must never gate an MCP operation.
 
+The host owns connector installation and credential state. Never write or rewrite a host-wide MCP
+configuration. From inside a running Agent task, use the host's connector UI or supported
+installer, then let that host complete OAuth and reconnect its own tool runtime.
+
 ## Read the relevant references
 
 Before a mutating course task:

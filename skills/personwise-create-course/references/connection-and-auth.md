@@ -42,6 +42,12 @@ client's published schema:
 }
 ```
 
+This JSON is a descriptive shape for the host's supported setup surface, not permission for an
+Agent to overwrite a user-global configuration file. Never write or rewrite a host-wide MCP
+configuration from inside a running task. A live host may watch that file, remove an existing
+connector, start OAuth outside its interactive connection state, or discard the callback before
+the task can use the tools.
+
 For clients whose registry uses typed tool dependencies, adapt this equivalent shape:
 
 ```yaml
@@ -66,6 +72,32 @@ A standards-compatible fallback client must support:
 
 If the client lacks remote OAuth MCP support, report that client capability blocker. Never work
 around it by asking the user to paste credentials or access tokens.
+
+### WorkBuddy
+
+In WorkBuddy, use **Connectors → Custom connectors → Configure MCP**, add the exact remote URL, and
+explicitly click **Connect** in MCP Service Management. Do not have the running Agent write
+`~/.workbuddy/mcp.json`. WorkBuddy 5.3.5 can observe such a background file change and begin OAuth
+outside the interactive connection state; authorization can then succeed while its callback is
+ignored and the upstream tools remain disconnected.
+
+WorkBuddy aggregates custom MCP servers behind its local `connector-proxy`. Seeing only
+`connector-proxy` in a generic MCP server/resource listing is therefore not evidence that
+PersonWise is absent. Verify the PersonWise card's connected state, search for
+`get_course_agent_capabilities`, and call that capability before any course mutation.
+
+If browser authorization completed but the card did not become connected, fully quit and reopen
+WorkBuddy, return to MCP Service Management, and click **Connect** once. Preserve the stored
+credentials on this first recovery attempt; do not delete the connector, rewrite the file, or ask
+the user to authorize again unless WorkBuddy opens a fresh authorization request.
+
+WorkBuddy 5.3.5 has a separate full-restart limitation verified against the production MCP: after
+the app was fully quit for longer than the 15-minute access-token lifetime, relaunch did not reuse
+the previously issued refresh token. The card returned to **Needs authentication**, and clicking
+**Connect** opened a fresh authorization request. This is client credential-restoration behavior;
+the server did not receive a refresh attempt. Complete that fresh authorization once, then repeat
+`get_course_agent_capabilities`. Do not lengthen the access-token lifetime or weaken OAuth for
+other clients to mask this WorkBuddy-specific behavior.
 
 ## Complete OAuth in the client
 
@@ -101,8 +133,10 @@ Explain the boundary precisely:
   never approves or directly publishes platform-wide content.
 - Billing, organization administration, course deletion or transfer, Topics approval, and direct
   platform-public publication are excluded.
-- Access tokens last 15 minutes. The client rotates refresh tokens in its own credential store; an
-  unused connection expires after one year, while an actively used authorization remains durable.
+- Access tokens last 15 minutes. This is not the login lifetime: a compatible client keeps the
+  refresh token in its credential store and can obtain a new access token after the computer was
+  powered off for longer than 15 minutes. The refresh token lasts one year; reauthorization is
+  required only after that token expires, is revoked, or is lost.
 - The user can revoke the connection from Connected Agents at any time.
 
 Do not ask for a second authorization when an ordinary course step becomes necessary. One grant is
@@ -153,6 +187,7 @@ unresolved. Skill presence and Skill version are never compatibility inputs.
 | 403 or `course_agent_mcp_insufficient_scope` | The connection is legacy-limited, stale, or mismatched with the current contract | Refresh once; if it remains limited, start one fresh full-course authorization. Do not request capability-by-capability consent. |
 | Target-above-ceiling error | A legacy-limited connection cannot complete the requested target | Start one fresh full-course authorization; never silently change the requested result. |
 | Required MCP tool is absent | The connected server cannot complete that requested workflow | Stop only the affected workflow and report the missing tool. Do not require or upgrade a Skill. |
+| WorkBuddy shows OAuth success but no PersonWise tools | Its callback or reconnect state was not applied | Fully quit and reopen WorkBuddy, then click **Connect** once in MCP Service Management and repeat the capability call. If WorkBuddy opens a fresh authorization request after a full restart, complete it once. Do not infer absence from `connector-proxy`. |
 | 429 | Connection/tool rate limit | Honor `Retry-After`; do not parallel-hammer. |
 
 After reconnection, repeat the capability read. For an existing course task, call the relevant
