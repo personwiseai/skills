@@ -44,9 +44,9 @@ operation.
 
 ## Current release
 
-- Bundle: `1.2.2`
-- Tag: `v1.2.2`
-- Core Skill: `personwise-create-course` `1.1.2`
+- Bundle: `1.3.0`
+- Tag: `v1.3.0`
+- Core Skill: `personwise-create-course` `1.2.0`
 - Install page: https://personwise.ai/skills/personwise-create-course
 - Support: support@personwise.ai
 - Privacy: https://personwise.ai/privacy

@@ -54,23 +54,23 @@ At `succeeded` or `cancelled`, actions must be empty.
 Never chain mutating tool calls. Even when a mutation returns a new revision, perform the fresh
 reads required for the next mutation before calling it.
 
-## Create a topic-led or supplied-text run
+## Start a topic-led or supplied-text run
 
-Call `create_course` once with:
+When advertised, call `start_course_creation` once with:
 
 - a stable `idempotency_key`;
 - the blueprint fields from `course-design.md`;
 - `knowledge_source_mode=open`;
 - `declared_sources=0` unless documents are supplied;
-- normally `stop_after=outline_ready`;
+- the current Agent's truthful `visual_review_capability` (`multimodal` or `none`);
 - an explicit narrower `distribution_target` only when the user requests one.
 
 Omit `distribution_target` to use the normal link-accessible completion default. The public
 `courses:manage` grant supports draft, private, link-accessible completion, and an explicit Topics
 review submission; it never grants Topics approval or direct platform-public distribution.
 
-Immediately save the returned run ID, then call `get_run`. Do not infer the first legal action only
-from the create response.
+Immediately save the returned run ID. Follow its `poll_after_seconds`; do not invent a tighter
+poll. The zero-source server workflow starts immediately.
 
 ## Create a document-backed run
 
@@ -81,7 +81,8 @@ For strict materials:
 
 1. Choose the retained files and set `knowledge_source_mode=materials_only`.
 2. Set `declared_sources` to their exact count.
-3. Call `create_course`; project/credit materialization is deferred until sources are ready.
+3. Call `start_course_creation`; project/credit materialization is deferred until sources are
+   ready.
 4. For each file, compute the exact byte size and a checksum formatted
    `sha256:<64 lowercase hex characters>`.
 5. Call `request_upload_ticket` with:
@@ -94,7 +95,9 @@ For strict materials:
 7. Keep the upload authorization and action fragment out of messages and the ledger.
 8. Poll `get_upload_status` by the non-secret ticket ID until `consumed`, `failed`, `expired`, or
    `revoked`.
-9. Call `get_run` and confirm the resulting source ID/checksum/status.
+9. Call `get_run` and confirm the resulting source ID/checksum/status. When every retained source
+   is ready, the server reconcile starts generation automatically (normally within 30 seconds); do
+   not call `advance_run` merely to activate it.
 
 For `open` with documents, follow the same ticket sequence but describe the course as
 source-assisted, not strict.
@@ -113,11 +116,8 @@ source-assisted, not strict.
 
 ## Advance to and review `outline_ready`
 
-At `awaiting_sources`, `project_created`, or another state whose fresh actions include `continue`,
-call `advance_run` with a new logical key. Use `expected_revision` whenever the current response
-provides one. One call advances one safe segment; it is not an instruction to loop blindly.
-
-Poll `get_run` with bounded backoff until `paused / outline_ready`.
+Poll `get_run` no earlier than `poll_after_seconds` until `review_required / outline_ready` (public
+status may remain `paused` for compatibility).
 
 Call `get_authoring_snapshot` with the project ID. Review every slide's stable ID, position, title,
 and `key_points`.
@@ -133,18 +133,12 @@ Only existing `title`, `key_points`, `page_text`, and `script` fields are editab
 delete, or reorder slides. After an accepted batch, fetch the complete snapshot again and use only
 its new revision.
 
-## Advance to and review `script_ready`
+## Approve and review `script_ready`
 
-Call `get_run` again. If `continue` remains allowed, call `advance_run` with the latest revision and
-a new key. The remote MCP completes one model operation (one Page text or one Narration) in each
-bounded call so it stays below common Agent-host tool timeouts. After every call:
-
-1. call `get_run`;
-2. if state is `waiting / outline_ready` and `continue` remains allowed, call `advance_run` again
-   with a new key;
-3. stop the loop at `paused / script_ready`, a safe error, cancellation, or loss of `continue`.
-Do not merely poll an unchanged `waiting / outline_ready` run, and do not issue concurrent
-advances.
+Call `get_run` again, then approve the Outline with one `advance_run` using the latest revision and
+a new key. Page text and Narration run as server-side durable work. Poll using the returned
+`poll_after_seconds`; never issue one mutation per page. Stop at `review_required / script_ready`,
+a safe error, cancellation, or a terminal result.
 
 Fetch a new authoring snapshot and inspect every aligned:
 
@@ -186,7 +180,7 @@ Immediately before image generation:
 
 1. Call `get_run`; confirm `script_ready` and `continue`.
 2. Call `get_authoring_snapshot`; capture its fresh revision.
-3. Call `advance_run` with that `expected_revision` and a new images-start key.
+3. Approve the Script with one `advance_run` using that `expected_revision` and a new key.
 
 Poll `get_run` with bounded intervals. Honor `Retry-After` or `retry_after_seconds`. When
 `waiting_images` permits `continue`, first read fresh state; callbacks may already have promoted the
@@ -204,7 +198,8 @@ Check both:
 
 If both are true:
 
-1. Call `get_slide_preview` for every zero-based slide index.
+1. Call `get_slide_review_sheet` in ordered batches of no more than six indexes; use
+   `get_slide_preview` only where more detail is needed.
 2. Inspect the MCP-native image content returned by the tool. If the Agent host exposes only its
    resource link, load that protected resource instead.
 3. Apply the full-deck review in `visual-quality.md`.
@@ -215,7 +210,7 @@ If both are true:
    bounded `additional_instructions` string. State the observed defect and required visual
    boundary (for example, “do not depict a meter, probe, numeric reading, or threshold”); do not
    submit a blind redraw when the failure is understood.
-6. Poll each target slide to completed state and re-run `get_slide_preview` for each changed slide.
+6. Poll each target slide to completed state and re-run a sheet for the changed subset.
 
 If the run moved to `config_preparing` or `publish_blocked` before review finished, or a still-
 unpublished `image_ready` run must re-enter review, fetch a current revision and call
@@ -231,10 +226,10 @@ For a genuinely reviewed deterministic replacement, request an upload ticket wit
 After handoff, reconcile `get_upload_status` and selected image/version state. Re-inspect the
 selected result when the Agent has vision. Do not retry an ambiguous upload until reconciliation.
 
-If the Agent cannot consume image content, do not call previews merely to claim visual review. Use
-structured completion state, continue the authorized workflow, and record `not_performed`.
+If the Agent declared `none`, the server does not pause for image review. Do not call previews
+merely to claim visual review; report the returned `not_performed` reason.
 
-## Cast the presenter and configure the course
+## Optional deliberate casting and configuration
 
 Call `list_presenters` with the project's concrete language, a bounded `limit` (maximum 20), an
 `offset`, and only relevant optional appearance filters. Page through `total` only as needed; do
@@ -265,7 +260,7 @@ Use the returned configuration revision for requested updates:
 Each call needs at least one actual change, the fresh `expected_revision`, and a new idempotency key.
 Read configuration again after each accepted update.
 
-## First publish and distribute
+## Observe server-side finish and distribution
 
 Before publication, call `get_run`, `get_authoring_snapshot`, and `get_course_configuration` after
 the latest mutation.
@@ -279,15 +274,11 @@ Confirm:
 
 Visual review may be `not_performed`; that is honest evidence and not a server permission gate.
 
-There are two safe completion styles:
-
-- Use `advance_run` one segment at a time to complete the run's stored final goal.
-- Use the explicit tools when deliberate control/evidence is needed:
-  - `first_publish` for first publish only;
-  - `set_course_visibility` with `private` or `unlisted`;
-  - `submit_topic_review` for an explicitly authorized review request.
-
-Do not mix both styles against stale state. After each mutation, call `get_run`.
+After approving the last required review, poll `get_run` according to `poll_after_seconds`. The
+server completes configuration, compliance, CDN narration, first publish, visibility, and optional
+Topics submission using the stored target and rechecks the live OAuth grant before mutations. Use
+explicit publish/visibility tools only for repair when fresh state allows them; do not race the
+orchestrated finish.
 
 Target behavior:
 
@@ -304,6 +295,13 @@ approval.
 After `first_publish`, call `get_run` before a visibility mutation. After publication/visibility,
 call `get_run` and `get_course`. Report `public_url` and `embed_url` only when `playable=true`. A
 slug alone does not prove playability.
+
+## Legacy fallback
+
+If `start_course_creation` or orchestrated capability is absent, use `create_course` with
+`stop_after=outline_ready` and the older bounded `advance_run` sequence. One legacy Narration
+mutation may perform only one Page-text/Narration operation, so always read fresh state between
+advances. Never choose this slower path when the connected server advertises orchestration.
 
 ## Query courses
 

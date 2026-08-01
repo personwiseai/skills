@@ -6,14 +6,14 @@
     "url": "https://personwise.ai"
   },
   "description": "Official PersonWise Agent Skills and OAuth-connected tools.",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "plugins": [
     {
       "name": "personwise-create-course",
       "source": "./",
       "displayName": "Create a PersonWise Course",
       "description": "Create polished, interactive PersonWise courses from a topic or materials.",
-      "version": "1.2.2",
+      "version": "1.3.0",
       "author": {
         "name": "PersonWise",
         "email": "support@personwise.ai",

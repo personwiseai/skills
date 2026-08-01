@@ -13,9 +13,11 @@ result authorized by the user's OAuth connection.
 This Skill is an optional quality playbook. The PersonWise MCP is complete and usable without this
 Skill, and Skill presence or version must never gate an MCP operation.
 
-The host owns connector installation and credential state. Never write or rewrite a host-wide MCP
-configuration. From inside a running Agent task, use the host's connector UI or supported
-installer, then let that host complete OAuth and reconnect its own tool runtime.
+The host owns remote MCP dependency installation, lifecycle, and credential state. Never write or rewrite a host-wide MCP
+configuration. From inside a running Agent task, use only a dependency the host has supplied, then
+let that host complete OAuth and inject the connected tools into its own runtime. Do not name or
+invent a host-specific setup surface unless the host is positively identified from runtime
+metadata or an explicit user statement.
 
 ## Read the relevant references
 
@@ -30,6 +32,10 @@ Before a mutating course task:
 Read [references/connection-and-auth.md](references/connection-and-auth.md) completely when the
 MCP is absent, OAuth is incomplete, capability readiness is unproven, or authorization has
 failed. For a query-only request, read connection/auth and the query section of `workflow.md`.
+
+Only when the current host is positively identified as WorkBuddy from runtime metadata or an
+explicit user statement, read [references/workbuddy.md](references/workbuddy.md). Never infer the
+host from missing MCP tools, a callback URL, or terminology found in this Skill.
 
 ## Verify the MCP capability first
 
@@ -108,12 +114,21 @@ Record a secret-free blueprint containing:
 Use `course-design.md` and `course-archetypes.md`; do not force unrelated subjects into the same
 template.
 
-### 2. Create one durable run
+### 2. Start one orchestrated durable run
 
-Use `create_course` with a stable non-secret idempotency key. Prefer
-`stop_after=outline_ready` for deliberate authoring. Before and after every mutation, call
-`get_run` and obey the fresh `status`, `checkpoint`, `allowed_actions`, `authoring_revision`,
-source state, and safe error.
+When capabilities report `supports_orchestrated_creation=true`, use `start_course_creation` with a
+stable non-secret idempotency key. Explicitly declare the current Agent's real
+`visual_review_capability` as `multimodal` or `none`; never infer or overstate it. The server owns
+the slow Outline, Narration, image, configuration, CDN, publish, and distribution stages. A normal
+tool call returns quickly; use `get_run` no earlier than its `poll_after_seconds` guidance.
+
+The server pauses for Agent review at `outline_ready` and `script_ready`. These are not mandatory
+human confirmation gates: inspect, make objective corrections if needed, then call `advance_run`
+once with the fresh revision. A multimodal run also pauses at `image_ready`; a non-vision run
+automatically continues and records `visual_review_status=not_performed` with its reason.
+
+Use legacy `create_course` only when the connected contract does not advertise orchestrated
+creation. In that fallback, follow the bounded legacy sequence in `workflow.md`.
 
 Never chain two mutating calls. A mutation result, including one that returns a new revision, does
 not replace the required fresh reads before the next mutation.
@@ -129,11 +144,9 @@ At `outline_ready`, inspect every title and Key-point set for one clear teaching
 coverage, factual support, and non-repetition. Apply the smallest objective corrections with
 `update_slides`, then fetch a fresh snapshot and revision.
 
-Advance toward `script_ready`. Narration is deliberately bounded to one model operation (Page text
-or Narration) per MCP mutation. After each `advance_run`, fetch `get_run`; while the run remains
-`waiting / outline_ready` with `continue` allowed, call `advance_run` again with a new
-idempotency key. Do not merely poll an unchanged waiting run. At `paused / script_ready`, review
-every aligned set:
+Approve the reviewed Outline once. The server then generates Page text and Narration durably; do
+not issue per-page mutations. Poll according to `poll_after_seconds`. At `paused / script_ready`,
+review every aligned set:
 
 ```text
 title + key_points -> what the page teaches
@@ -152,8 +165,9 @@ ambiguous upload before issuing another ticket.
 Advance from the freshest revision and poll with bounded backoff until every slide has canonical
 image state and the run reaches `image_ready`.
 
-- If the Agent can consume the MCP-native image content (or its protected-resource fallback),
-  inspect every slide and every serious
+- If the Agent can consume the MCP-native image content (or its protected-resource fallback), use
+  `get_slide_review_sheet` in ordered batches of at most six, then use `get_slide_preview` only for
+  a page needing closer inspection. Inspect every slide and every serious
   presenter candidate according to `visual-quality.md`. Correct content first, then regenerate the
   complete failed subset with concrete per-slide `slide_instructions`; do not blindly redraw.
   Re-inspect changed slides. After any content correction, call `get_run` and
@@ -165,24 +179,23 @@ Use a reviewed replacement only when a human or vision-capable Agent genuinely r
 
 ### 5. Configure and finish
 
-Use paginated `list_presenters` results with bounded pages and exact target-language Voice
-mappings. With vision, use the MCP-native image from `get_presenter_preview` to cast deliberately,
-or read its protected resource when inline image content is unavailable; without vision, use
-structured compatibility and make no appearance claims. Apply one compatible pair with
-`select_presenter`.
+The orchestrated path selects and validates the normal compatible presenter/Voice and completes
+configuration. Use paginated `list_presenters`, `get_presenter_preview`, `select_presenter`, or
+`update_course_configuration` only when the user supplied a concrete casting/layout requirement;
+apply that choice at a review checkpoint before approving continuation.
 
 After selection, re-read the run and authoring snapshot, then read configuration. Use
 revision-checked `update_course_configuration` only for a requested layout change. Verify the
 persisted presenter/Voice and layout values.
 
-Only then call `first_publish`, and call it once. Read the run again after first publish before any
-visibility mutation. Complete the final grant-bounded target:
+After the final Agent checkpoint, the server completes the stored grant-bounded target without
+another Agent mutation:
 
 - `draft`: leave unpublished;
 - `private`: first-publish privately;
-- `link`: first-publish, then use `set_course_visibility` with link-only `unlisted`;
+- `link`: first-publish, set link-only `unlisted`, and verify playability;
 - `topics_review`: require explicit user intent and permission, link playability, then call
-  `submit_topic_review`. This submits a review request; it does not approve distribution.
+  submit the Topics review request. This does not approve distribution.
 
 Never set direct platform-public visibility. Do not delete, transfer ownership, purchase credit,
 republish an existing version, approve distribution, administer organizations, or use platform

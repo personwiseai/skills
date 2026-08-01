@@ -22,8 +22,10 @@ require visual review for first publish.
 
 ## Vision-capable full-deck review
 
-At canonical `image_ready`, call `get_slide_preview` and consume the protected content for every
-zero-based slide index. Review at useful resolution; sample-only review is insufficient.
+At canonical `image_ready`, call `get_slide_review_sheet` with ordered batches of at most six
+zero-based slide indexes. This replaces one authorization/tool round trip per page while retaining
+protected-media rules. Use `get_slide_preview` for any page that needs closer inspection. Cover
+every page; sample-only review is insufficient.
 
 Keep a page ledger:
 
@@ -71,7 +73,8 @@ Fix factual or content causes before regenerating:
    `slide_instructions` entry for every understood visual failure, pairing its zero-based
    `slide_index` with concrete `additional_instructions` that exclude the observed defect.
 5. Poll each target's own canonical generation state; run-level image status is insufficient.
-6. Call `get_slide_preview` for every regenerated index and inspect again.
+6. Call `get_slide_review_sheet` for the regenerated subset (or individual preview for detail) and
+   inspect again.
 7. Repeat only for concrete unresolved findings.
 
 Do not split one intended failed subset into many single-slide requests. A regeneration without
