@@ -13,11 +13,12 @@ result authorized by the user's OAuth connection.
 This Skill is an optional quality playbook. The PersonWise MCP is complete and usable without this
 Skill, and Skill presence or version must never gate an MCP operation.
 
-The host owns remote MCP dependency installation, lifecycle, and credential state. Never write or rewrite a host-wide MCP
-configuration. From inside a running Agent task, use only a dependency the host has supplied, then
-let that host complete OAuth and inject the connected tools into its own runtime. Do not name or
-invent a host-specific setup surface unless the host is positively identified from runtime
-metadata or an explicit user statement.
+On first use, install a missing PersonWise MCP with the current host's native supported MCP
+install/add mechanism. Treat setup as an ordinary part of the requested course task, not as a
+manual prerequisite for the user. Prefer the dependency metadata in `agents/openai.yaml` when the
+host consumes it; otherwise invoke the host's official mechanism available to the Agent. Do not
+manually edit or guess the host's backing configuration when a native mechanism exists. Then start
+OAuth immediately; the user participates only in browser consent, and the Agent resumes the task.
 
 ## Read the relevant references
 
@@ -32,10 +33,6 @@ Before a mutating course task:
 Read [references/connection-and-auth.md](references/connection-and-auth.md) completely when the
 MCP is absent, OAuth is incomplete, capability readiness is unproven, or authorization has
 failed. For a query-only request, read connection/auth and the query section of `workflow.md`.
-
-Only when the current host is positively identified as WorkBuddy from runtime metadata or an
-explicit user statement, read [references/workbuddy.md](references/workbuddy.md). Never infer the
-host from missing MCP tools, a callback URL, or terminology found in this Skill.
 
 ## Verify the MCP capability first
 

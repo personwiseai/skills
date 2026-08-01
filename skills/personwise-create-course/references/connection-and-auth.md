@@ -1,6 +1,6 @@
-# Connect and authorize the PersonWise Course Creation MCP
+# Install and authorize the PersonWise Course Creation MCP
 
-## Use one standalone MCP connection
+## Use one standalone MCP installation
 
 The PersonWise MCP is a complete standalone product. No Skill is required. When this optional Skill
 is installed, its dependency metadata may register the same MCP automatically:
@@ -15,13 +15,19 @@ Verify that exact HTTPS URL. Do not substitute the main PersonWise API, an Auth 
 or a guessed regional endpoint. Do not request, issue, store, or rotate a PersonWise API key. The
 public remote connection authenticates with OAuth.
 
-After connection, call `get_course_agent_capabilities` or read
+After installation and OAuth, call `get_course_agent_capabilities` or read
 `personwise://course-agent/capabilities`. If either works and the required tools are present, setup
 is complete; do not add a duplicate server entry.
 
-## Add the MCP through the identified host
+## Install the MCP on first use
 
-Use the current host's published remote-MCP installation method. The public dependency facts are:
+Install the missing remote MCP now using the current host's native supported MCP install or add
+mechanism. This is part of fulfilling the course request. Do not ask the user to perform an
+installation that the Agent can complete through the current host.
+
+Prefer the dependency metadata in `agents/openai.yaml` when the host consumes it. Otherwise invoke
+the host's official MCP installation command, API, or Agent-accessible setup mechanism with these
+public dependency facts:
 
 ```text
 identifier: personwise-course-creation
@@ -29,21 +35,20 @@ transport:  streamable_http
 URL:        https://mcp.personwise.ai/mcp
 ```
 
-The endpoint value is:
+Use only documented native operations; do not guess or manually patch a backing configuration
+filename, directory, schema, token field, or raw credential. Do not configure the endpoint as
+local stdio, SSE-only, or a generic REST API.
 
-```text
-https://mcp.personwise.ai/mcp
-```
+Immediately after installation, start the host's native OAuth login or invoke the capability tool
+so the host begins OAuth itself. The user participates only in browser OAuth consent; the Agent
+retains responsibility for installation, resumption, capability verification, and the course
+workflow. Show the authorization URL when the host returns one, wait for consent, then continue in
+the same task. Do not stop after merely reporting the identifier, transport, URL, or scope.
 
-Do not guess a menu name, settings page, configuration filename, directory, schema, command, or
-token field. If the host has not been positively identified from runtime metadata or an explicit
-user statement, report only that the remote MCP dependency is absent and provide the public facts
-above. Do not claim that a particular UI, file, or installation mechanism exists.
-
-Never write or rewrite host-wide MCP configuration from inside a running task. A live host may
-watch its state, start OAuth outside the interactive task, or discard the callback before the task
-can use the tools. Let the identified host own installation, OAuth resumption, token storage, and
-tool injection. Do not configure the endpoint as local stdio, SSE-only, or a generic REST API.
+If the host cannot hot-load a newly installed MCP, use its supported reload or resume operation.
+Ask the user for an application restart only when the host truly requires that human action. If the
+host exposes no supported installation mechanism to the Agent, report that specific host
+limitation; do not present ordinary installation as a general manual prerequisite.
 
 A standards-compatible fallback client must support:
 

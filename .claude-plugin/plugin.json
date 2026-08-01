@@ -1,7 +1,7 @@
 {
   "name": "personwise-create-course",
   "displayName": "Create a PersonWise Course",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Create polished, interactive PersonWise courses from a topic or materials.",
   "author": {
     "name": "PersonWise",
