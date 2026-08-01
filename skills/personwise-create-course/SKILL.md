@@ -19,6 +19,10 @@ manual prerequisite for the user. Prefer the dependency metadata in `agents/open
 host consumes it; otherwise invoke the host's official mechanism available to the Agent. Do not
 manually edit or guess the host's backing configuration when a native mechanism exists. Then start
 OAuth immediately; the user participates only in browser consent, and the Agent resumes the task.
+If the browser completes consent but the Agent is not resumed, recover once with the complete
+loopback callback URL procedure in
+[references/connection-and-auth.md](references/connection-and-auth.md); never extract codes or
+tokens.
 
 ## Read the relevant references
 
