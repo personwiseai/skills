@@ -1,6 +1,6 @@
 ---
 name: personwise-interactive-product-explainer
-description: Create a source-grounded five-page interactive product explainer that can be embedded on a website and answer visitor questions through PersonWise. Use for a product launch, SaaS explainer, product demo alternative, website product story, or product-page refresh when verified product materials are available.
+description: Create a source-grounded five-page interactive SaaS or software product explainer that website visitors can question and embed through PersonWise. Use for a product launch, SaaS website explainer, product demo alternative, website product tour, or product-page refresh when verified product materials are available; do not use for machine-learning model explainability or codebase explanation.
 license: MIT
 ---
 
@@ -22,10 +22,11 @@ Before creating anything, read both files completely:
 
 ## Trigger and refusal boundary
 
-Use this Skill when the user wants an interactive explanation of one product and provides, points
-to, or authorizes research of current source material. Typical language includes:
+Use this Skill when the user wants an interactive explanation of one SaaS, software, or other
+commercial product and provides, points to, or authorizes research of current source material.
+Typical language includes:
 
-- product explainer, SaaS explainer, or explainer-video alternative;
+- interactive SaaS product explainer, product explainer, or explainer-video alternative;
 - interactive product demo or product walkthrough;
 - website product story, launch-page explainer, or Product Hunt companion;
 - a product introduction visitors can question and embed.
@@ -34,6 +35,7 @@ Do not use it for:
 
 - a pixel-accurate clickable UI simulation or generated software prototype;
 - a comparative buying guide whose main job is ranking several products;
+- machine-learning model explainability, SHAP analysis, or codebase explanation;
 - generic employee/customer training unrelated to explaining a product;
 - a product claim that cannot be grounded in current supplied or verified sources.
 

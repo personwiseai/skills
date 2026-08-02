@@ -1,0 +1,13 @@
+interface:
+  display_name: "创建可问答的产品介绍"
+  short_description: "把真实产品资料制作成可嵌入网站、可直接提问的五页互动产品介绍"
+  default_prompt: "使用 $personwise-interactive-product-explainer-zh-cn，根据这些产品资料创建一份有事实依据的互动产品介绍。"
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "personwise-course-creation"
+      description: "通过 OAuth 创建并发布 PersonWise 课程"
+      transport: "streamable_http"
+      url: "https://mcp.personwise.ai/mcp"
+policy:
+  allow_implicit_invocation: true

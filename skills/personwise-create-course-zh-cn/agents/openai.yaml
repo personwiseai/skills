@@ -1,0 +1,13 @@
+interface:
+  display_name: "创建 PersonWise 课程"
+  short_description: "把主题或资料制作成可审阅、可发布的完整互动数字人课程"
+  default_prompt: "使用 $personwise-create-course-zh-cn 将我的主题或资料制作成一门完整的 PersonWise 课程。"
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "personwise-course-creation-cn"
+      description: "通过 OAuth 创建和完善 PersonWise 课程"
+      transport: "streamable_http"
+      url: "https://mcp.personwise.cn/mcp"
+policy:
+  allow_implicit_invocation: true

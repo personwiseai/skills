@@ -25,10 +25,10 @@ When `supports_skill_invocation_attribution=true`, include:
 
 ```json
 {
-  "skill_invocation": {
-    "skill_id": "personwise-interactive-product-explainer",
-    "skill_version": "1.0.0"
-  }
+    "skill_invocation": {
+      "skill_id": "personwise-interactive-product-explainer",
+      "skill_version": "1.0.1"
+    }
 }
 ```
 
