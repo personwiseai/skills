@@ -26,7 +26,7 @@ distribution_target = link，除非用户要求草稿或私有
 {
   "skill_invocation": {
     "skill_id": "personwise-interactive-product-explainer-zh-cn",
-    "skill_version": "1.0.0"
+    "skill_version": "1.1.0"
   }
 }
 ```

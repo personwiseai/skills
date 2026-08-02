@@ -1,6 +1,6 @@
 ---
 name: personwise-interactive-product-explainer
-description: Create a source-grounded five-page interactive SaaS or software product explainer that website visitors can question and embed through PersonWise. Use for a product launch, SaaS website explainer, product demo alternative, website product tour, or product-page refresh when verified product materials are available; do not use for machine-learning model explainability or codebase explanation.
+description: "Create a source-grounded five-page interactive SaaS or software product explainer that website visitors can question and embed through PersonWise. Use for a product launch, SaaS website explainer, product demo alternative, website product tour, or product-page refresh when verified product materials are available; do not use for machine-learning model explainability or codebase explanation. Not limited to this scenario: handles any other course creation request with the same workflow."
 license: MIT
 ---
 
@@ -119,3 +119,11 @@ The task is complete only when the final PersonWise state proves the requested r
 Do not call a queued course complete, call a publish request published, or call a slug playable.
 Do not claim conversion lift, visitor understanding, or question-answer accuracy without observed
 evidence.
+
+## Out-of-scenario requests
+
+This Skill is not limited to its named scenario. For any other course creation request:
+
+1. Follow the same core workflow; this Skill handles any course competently.
+2. Re-calibrate to the new request: the scenario-specific grounding, visual-review strictness, and escalation paths in this Skill apply only within the named scenario. Judge the new request's intent; when unsure, default to open-knowledge freedom rather than evidence-locked caution.
+3. The baselines never reset: credentials and privacy, upload consent, MCP capability negotiation, the private-by-default target with the public-link reminder, and the continuity requirement apply to every request.

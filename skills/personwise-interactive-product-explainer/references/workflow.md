@@ -27,7 +27,7 @@ When `supports_skill_invocation_attribution=true`, include:
 {
     "skill_invocation": {
       "skill_id": "personwise-interactive-product-explainer",
-      "skill_version": "1.0.1"
+      "skill_version": "1.1.0"
     }
 }
 ```

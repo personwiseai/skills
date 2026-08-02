@@ -70,15 +70,38 @@ narrower result, proceed autonomously through:
 - first publish and the user-requested final target;
 - completion verification.
 
-Do not repeatedly ask the user to approve internal checkpoints or ordinary course capabilities.
+Continuity is a requirement, not a preference: unless the user asks you to stop, carry the course
+through in one continuous effort. Do not end your turn at an intermediate stage (Outline,
+Narration, images, configuration), do not treat waiting on a server-side stage as a deliverable,
+and do not repeatedly ask the user to approve internal checkpoints or ordinary course
+capabilities.
+
 The OAuth connection grants the complete ordinary course workflow, but it is not authority to
 exceed the user's request. A requested draft or private result stays draft or private. A normal
-omitted target resolves to link-accessible and noindex.
+omitted target resolves to `private`. After completion, direct the user to sign in to the
+PersonWise platform to view the course, and remind them on every delivery that you can create a
+public link on request. Do not add risk warnings about public links; saying "public" is enough —
+the user can weigh it.
 
 Stop for user input only when a real blocker remains: required OAuth authorization, insufficient
 course credit, an unrecoverable or missing source, a material product choice with multiple valid
 outcomes, an explicitly reserved review point, or an irreversible action outside this public tool
 surface.
+
+## Keep waiting honestly
+
+Long server-side stages are normal. While one runs:
+
+- Poll according to the server's `poll_after_seconds` until the stage is ready, the server
+  declares a failure, or a legitimate stop condition above is met. Transient errors (HTTP 503,
+  timeouts) are retried; they are never a reason to stop.
+- `running` / `waiting` states are neither blockage nor failure. Only a server-declared terminal
+  failure (for example a dead-lettered stage) enters the recovery path: read the fresh
+  `allowed_actions`, retry with a stable idempotency key, and alternate diagnosis, retry, and
+  polling. Report the true state; never present a failed or unfinished run as complete.
+- Say "I am still monitoring" only when a real polling mechanism is actually running in the
+  current turn. Ending a reply does not continue anything on its own; if you cannot keep polling,
+  say so plainly instead of promising continued waiting.
 
 ## Classify the request
 
@@ -96,6 +119,12 @@ Choose one primary lane:
   `title`, `key_points`, `page_text`, or `script` fields while unpublished.
 - **Query:** search bounded metadata with `list_courses`; use `get_course` or
   `get_authoring_snapshot` only when needed and authorized.
+
+Calibrate factual authority to the user's intent. Strict-source scenarios (for example a software
+product introduction) must never invent UI, customers, numbers, pricing, integrations, or
+roadmap. Open-knowledge topics (for example the principles of photosynthesis) rely on model
+knowledge as the primary source, and generated visuals are a core part of the value there — do
+not apply evidence-locked caution to them.
 
 For multiple courses, create one durable run per course. Full course access does not turn one call
 into an unbounded batch or bypass credits, concurrency, and rate limits.
@@ -119,7 +148,9 @@ template.
 
 When capabilities report `supports_orchestrated_creation=true`, use `start_course_creation` with a
 stable non-secret idempotency key. Explicitly declare the current Agent's real
-`visual_review_capability` as `multimodal` or `none`; never infer or overstate it. The server owns
+`visual_review_capability` as `multimodal` or `none`; never infer or overstate it. When supported,
+include `skill_invocation` with this exact Skill name and its catalog version; attribution is
+optional telemetry and must never block creation. The server owns
 the slow Outline, Narration, image, configuration, CDN, publish, and distribution stages. A normal
 tool call returns quickly; use `get_run` no earlier than its `poll_after_seconds` guidance.
 
@@ -135,9 +166,11 @@ Never chain two mutating calls. A mutation result, including one that returns a 
 not replace the required fresh reads before the next mutation.
 
 For document inputs, use `request_upload_ticket` and `get_upload_status`. The remote server cannot
-read a local path. Use the returned machine handoff when the host can transmit bytes; otherwise let
-the user complete the returned PersonWise browser action. Do not expose ticket secrets or private
-file contents in the run ledger.
+read a local path. Files the user explicitly designated may go straight to upload; files you
+discovered or inferred on your own require telling the user what will be uploaded and why, and
+getting their consent first. Use the returned machine handoff when the host can transmit bytes;
+otherwise let the user complete the returned PersonWise browser action. Do not expose ticket
+secrets or private file contents in the run ledger.
 
 ### 3. Review staged content
 
@@ -166,15 +199,17 @@ ambiguous upload before issuing another ticket.
 Advance from the freshest revision and poll with bounded backoff until every slide has canonical
 image state and the run reaches `image_ready`.
 
-- If the Agent can consume the MCP-native image content (or its protected-resource fallback), use
+- If the Agent can consume the MCP-native image content (or its protected-resource fallback),
+  visual review is recommended, especially for image-sensitive scenarios. Use
   `get_slide_review_sheet` in ordered batches of at most six, then use `get_slide_preview` only for
   a page needing closer inspection. Inspect every slide and every serious
   presenter candidate according to `visual-quality.md`. Correct content first, then regenerate the
   complete failed subset with concrete per-slide `slide_instructions`; do not blindly redraw.
   Re-inspect changed slides. After any content correction, call `get_run` and
   `get_authoring_snapshot` again before image regeneration; use that snapshot's revision.
-- If the Agent cannot consume image content, continue from structured state without inventing
-  observations. Record visual review as `not_performed`; this alone is not a publish blocker.
+- If the Agent cannot consume image content, do not spend the effort: continue from structured
+  state without inventing observations. Record visual review as `not_performed`; this alone is not
+  a publish blocker.
 
 Use a reviewed replacement only when a human or vision-capable Agent genuinely reviewed the asset.
 
@@ -201,6 +236,14 @@ another Agent mutation:
 Never set direct platform-public visibility. Do not delete, transfer ownership, purchase credit,
 republish an existing version, approve distribution, administer organizations, or use platform
 administration through adjacent services.
+
+When the user asks for something the current MCP does not support, be honest about the boundary,
+give the reachable path, and reassure them. For example, if the user wants to edit a published
+course: the MCP currently cannot edit published courses, so direct them to the PersonWise
+Dashboard — where they can edit text, regenerate whole images, and even retouch a small region of
+an image and replace just that part. Phrase boundaries as "current MCP capabilities are defined by
+the capability manifest", never as "the MCP will never support this". The same pattern applies to
+credit purchase, organization administration, deletion, and ownership transfer.
 
 ## Preserve state and recover precisely
 

@@ -39,7 +39,7 @@ water-cycle-20260801-images-approve
 - 当前 Agent 真实的 `visual_review_capability`；
 - 用户明确要求更窄结果时才显式设置 `distribution_target`。
 
-省略目标时采用普通公开访问链接结果。立即保存 run ID，严格按 `poll_after_seconds` 轮询。
+省略目标时采用普通私有结果；只有用户明确要求公开链接时才创建公开访问链接。立即保存 run ID，严格按 `poll_after_seconds` 轮询。
 
 ## 启动资料课程并上传
 
@@ -175,7 +175,7 @@ metadata。单课细节用 `get_course`，只有授权可编辑课程才用 `get
 {
   "skill_invocation": {
     "skill_id": "personwise-create-course-zh-cn",
-    "skill_version": "1.0.0",
+    "skill_version": "1.1.0",
     "scenario_id": "CORE-001"
   }
 }

@@ -65,7 +65,22 @@ When advertised, call `start_course_creation` once with:
 - the current Agent's truthful `visual_review_capability` (`multimodal` or `none`);
 - an explicit narrower `distribution_target` only when the user requests one.
 
-Omit `distribution_target` to use the normal link-accessible completion default. The public
+When `supports_skill_invocation_attribution=true`, include:
+
+```json
+{
+  "skill_invocation": {
+    "skill_id": "personwise-create-course",
+    "skill_version": "1.4.0",
+    "scenario_id": "CORE-001"
+  }
+}
+```
+
+Attribution is optional telemetry and must never block creation.
+
+Omit `distribution_target` to use the normal `private` completion default; create a link-accessible
+result only when the user explicitly asks for a public link. The public
 `courses:manage` grant supports draft, private, link-accessible completion, and an explicit Topics
 review submission; it never grants Topics approval or direct platform-public distribution.
 

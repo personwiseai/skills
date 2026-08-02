@@ -66,9 +66,9 @@ version never gates an MCP operation.
 
 ## Current release
 
-- Bundle: `1.4.0`
-- Tag: `v1.4.0`
-- Core Skill: `personwise-create-course` `1.3.2`
+- Bundle: `1.4.1`
+- Tag: `v1.4.1`
+- Core Skill: `personwise-create-course` `1.4.0`
 - Install page: https://personwise.ai/skills/personwise-create-course
 - Support: support@personwise.ai
 - Privacy: https://personwise.ai/privacy
