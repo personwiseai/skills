@@ -1,0 +1,13 @@
+interface:
+  display_name: Report Briefing
+  short_description: Turn a report into an askable digital-human briefing course.
+  default_prompt: Use $personwise-report-briefing to build a report briefing course from our whitepaper.
+dependencies:
+  tools:
+  - type: mcp
+    value: personwise-course-creation
+    description: Create and publish PersonWise courses with OAuth
+    transport: streamable_http
+    url: https://mcp.personwise.ai/mcp
+policy:
+  allow_implicit_invocation: true

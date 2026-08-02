@@ -1,0 +1,13 @@
+interface:
+  display_name: 开发者 Onboarding
+  short_description: 把 API 文档变成数字人讲解的互动首次调用课程，学员可随时语音提问
+  default_prompt: 使用 $personwise-developer-quickstart-zh-cn，根据这些资料制作一门开发者快速上手课程。
+dependencies:
+  tools:
+  - type: mcp
+    value: personwise-course-creation-cn
+    description: 通过中国区 OAuth 创建并发布 PersonWise 课程
+    transport: streamable_http
+    url: https://mcp.personwise.cn/mcp
+policy:
+  allow_implicit_invocation: true

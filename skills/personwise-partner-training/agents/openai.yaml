@@ -1,0 +1,13 @@
+interface:
+  display_name: Partner Training
+  short_description: Turn partner program materials into an askable digital-human course.
+  default_prompt: Use $personwise-partner-training to build a partner training course from our program materials.
+dependencies:
+  tools:
+  - type: mcp
+    value: personwise-course-creation
+    description: Create and publish PersonWise courses with OAuth
+    transport: streamable_http
+    url: https://mcp.personwise.ai/mcp
+policy:
+  allow_implicit_invocation: true

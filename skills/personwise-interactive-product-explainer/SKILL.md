@@ -1,6 +1,6 @@
 ---
 name: personwise-interactive-product-explainer
-description: "Create a source-grounded five-page interactive SaaS or software product explainer that website visitors can question and embed through PersonWise. Use for a product launch, SaaS website explainer, product demo alternative, website product tour, or product-page refresh when verified product materials are available; do not use for machine-learning model explainability or codebase explanation. Not limited to this scenario: handles any other course creation request with the same workflow."
+description: "Create a source-grounded interactive digital-human SaaS or software product explainer that website visitors can question and embed through PersonWise. Use for a product launch, SaaS website explainer, product demo alternative, website product tour, or product-page refresh when verified product materials are available; do not use for machine-learning model explainability or codebase explanation. Not limited to this scenario: handles any other course creation request with the same workflow."
 license: MIT
 ---
 
@@ -55,7 +55,7 @@ Use supplied screenshots only as Reference or Pin images. A Pin preserves the ex
 Reference may influence a new visual. Never redraw an imagined interface. When no verified UI
 exists, use editorial diagrams, product concepts, or workflow illustrations without screens.
 
-## Define the five-page artifact
+## Define the explainer artifact
 
 Before mutation, write a secret-free blueprint for exactly five pages:
 
@@ -89,8 +89,10 @@ Follow `references/workflow.md`. The required quality gates are:
 2. Create one durable run with `desired_slide_count=5`, a stable idempotency key, and
    `stop_after=outline_ready`.
 3. When supported, include `skill_invocation` with this exact Skill name and its catalog version.
-   Attribution is optional telemetry and must never block creation.
-4. At `outline_ready`, check the five-page jobs, factual coverage, and exclusions; make only
+   Attribution is optional telemetry and must never block creation. If the host knows the
+   installation platform, also include `surface` (`skills_sh`, `clawhub`, `smithery`,
+   `github_skill`, `skillhub_cn`, `agentskill`, or `tessl`); omit it when unknown.
+4. At `outline_ready`, check each page's job, factual coverage, and exclusions; make only
    objective corrections.
 5. At `script_ready`, review every `title`, `key_points`, `page_text`, and `script` against the
    source ledger. Remove or qualify every unsupported claim.
@@ -108,7 +110,7 @@ Never chain two mutations without the fresh reads required by the MCP. Obey curr
 
 The task is complete only when the final PersonWise state proves the requested result. Return:
 
-- the five-page teaching arc and the source boundary used;
+- the teaching arc and the source boundary used;
 - run/project IDs and final checkpoint;
 - content-review and visual-review status;
 - any omitted or qualified product claims;

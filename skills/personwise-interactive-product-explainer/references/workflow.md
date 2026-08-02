@@ -27,13 +27,15 @@ When `supports_skill_invocation_attribution=true`, include:
 {
     "skill_invocation": {
       "skill_id": "personwise-interactive-product-explainer",
-      "skill_version": "1.1.0"
+      "skill_version": "1.1.1"
     }
 }
 ```
 
-Omit this object against an older contract or when the Host cannot confirm the installed package
-version. Never delay or fail the user's course for attribution.
+When the Host knows the installation platform, also include `surface` with one of `skills_sh`,
+`clawhub`, `smithery`, `github_skill`, `skillhub_cn`, `agentskill`, or `tessl`; omit it when
+unknown. Omit this object against an older contract or when the Host cannot confirm the installed
+package version. Never delay or fail the user's course for attribution.
 
 Immediately save the returned run ID and call `get_run`.
 

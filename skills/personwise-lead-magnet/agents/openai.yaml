@@ -1,0 +1,13 @@
+interface:
+  display_name: Lead Magnet
+  short_description: Turn your expertise into an askable digital-human free mini course.
+  default_prompt: Use $personwise-lead-magnet to build a lead magnet mini course from our expertise content.
+dependencies:
+  tools:
+  - type: mcp
+    value: personwise-course-creation
+    description: Create and publish PersonWise courses with OAuth
+    transport: streamable_http
+    url: https://mcp.personwise.ai/mcp
+policy:
+  allow_implicit_invocation: true

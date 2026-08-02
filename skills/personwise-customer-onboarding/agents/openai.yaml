@@ -1,0 +1,13 @@
+interface:
+  display_name: Customer Onboarding Course
+  short_description: Give every new customer an askable digital-human onboarding course.
+  default_prompt: Use $personwise-customer-onboarding to build a customer onboarding course from our onboarding materials.
+dependencies:
+  tools:
+  - type: mcp
+    value: personwise-course-creation
+    description: Create and publish PersonWise courses with OAuth
+    transport: streamable_http
+    url: https://mcp.personwise.ai/mcp
+policy:
+  allow_implicit_invocation: true
