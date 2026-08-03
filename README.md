@@ -1,5 +1,10 @@
 # PersonWise Skills
 
+## Current releases
+
+- International English Skills: `v2.0.0-en` (requires PersonWise CLI `1.0.1`)
+- Mainland China Skills: unchanged from `v1.5.0`
+
 Public, optional Agent Skills for additional PersonWise course-design guidance. The standalone MCP
 at `https://mcp.personwise.ai/mcp` already contains the complete international course-creation workflow;
 user identity, authorization, course credits, durable state, and product logic stay in the

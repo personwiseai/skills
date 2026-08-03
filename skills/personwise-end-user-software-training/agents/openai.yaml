@@ -2,12 +2,5 @@ interface:
   display_name: End-User Software Training
   short_description: Turn training guides into an askable digital-human end-user course.
   default_prompt: Use $personwise-end-user-software-training to build end-user training for our CRM from our training guides.
-dependencies:
-  tools:
-  - type: mcp
-    value: personwise-course-creation
-    description: Create and publish PersonWise courses with OAuth
-    transport: streamable_http
-    url: https://mcp.personwise.ai/mcp
 policy:
   allow_implicit_invocation: true

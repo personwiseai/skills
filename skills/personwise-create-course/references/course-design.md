@@ -46,9 +46,8 @@ Do not pad. Each page needs one primary teaching job and a reason for its visual
 | `voice_id` / `voice_plane_voice_id` | Optional known compatible Voice lane UUID. Never invent or mix an unrelated presenter/Voice pair. |
 | `knowledge_source_mode` | `open` or `materials_only`; fixes the factual acquisition boundary. |
 | `declared_sources` | Exact retained document count expected before deferred project creation. |
-| `visual_review_capability` | Required orchestrated declaration: `multimodal` when this Agent can truly inspect MCP images, otherwise `none`. |
-| `stop_after` | Legacy `create_course` fallback checkpoint; omitted from `start_course_creation`. |
-| `distribution_target` | Optional `draft`, `private`, `link`, or `topics_review`, bounded by OAuth consent. Omission follows the grant default. |
+| `visual_review_capability` | Declare `multimodal` only when this Agent can truly inspect downloaded review images; otherwise `none`. |
+| `distribution_target` | Optional `draft`, `private`, `link`, or `topics_review`, bounded by OAuth consent and advertised capabilities. |
 
 At least one of `topic`, `content`, or a declared source is required. `materials_only` requires at
 least one declared source.

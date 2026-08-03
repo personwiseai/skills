@@ -2,12 +2,5 @@ interface:
   display_name: SOP and Process Training
   short_description: Turn SOP documents into an askable digital-human procedure course.
   default_prompt: Use $personwise-sop-process-training to build an SOP training course from our procedure documents.
-dependencies:
-  tools:
-  - type: mcp
-    value: personwise-course-creation
-    description: Create and publish PersonWise courses with OAuth
-    transport: streamable_http
-    url: https://mcp.personwise.ai/mcp
 policy:
   allow_implicit_invocation: true

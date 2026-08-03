@@ -2,7 +2,7 @@
 
 ## Build a claim ledger
 
-Before `create_course`, list the claims the explainer may make. For each claim, record:
+Before `course create`, list the claims the explainer may make. For each claim, record:
 
 ```text
 claim
