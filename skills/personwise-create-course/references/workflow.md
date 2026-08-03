@@ -17,9 +17,11 @@ file and pass it through `--input`.
 
 ## Create a topic-led or supplied-text run
 
-Prepare a create object with the blueprint fields, `knowledge_source_mode=open`, exact
-`desired_slide_count`, truthful visual capability, explicit target only when requested, and optional
-Skill attribution. Then run:
+First run `course readiness --json`. If it is blocked, stop before blueprint design and report the
+returned action. Otherwise resolve `desired_slide_count` from the live maximum, recomposing any
+oversized request rather than truncating it. Then prepare a create object with the blueprint fields,
+`knowledge_source_mode=open`, truthful visual capability, explicit target only when requested, and
+optional Skill attribution. Run:
 
 ```text
 personwise --account <alias> course create --input <create.json> --json
@@ -30,7 +32,8 @@ Save `run_id` immediately. The response allocates durable work; it is not comple
 ## Create a document-backed run
 
 For strict documents, set `materials_only` and the exact retained source count before creation.
-For each user-approved PDF, PPTX, DOCX, Markdown, or TXT file (maximum 50 MiB), run:
+For each user-named, attached, or selected PDF, PPTX, DOCX, Markdown, or TXT file (maximum 50 MiB),
+run:
 
 ```text
 personwise --account <alias> source add --run-id <run-id> --path <exact-path> --json
@@ -69,7 +72,8 @@ reorder slides through this workflow and never chain blind mutations.
 
 ## Attach a reference image
 
-Only during an allowed review window and only for a user-approved bounded PNG/JPEG/WebP:
+Only during an allowed review window and for a user-named, attached, or selected bounded
+PNG/JPEG/WebP (Agent-discovered files require approval):
 
 ```text
 personwise --account <alias> image attach-reference --project-id <project-id> \
@@ -119,7 +123,7 @@ personwise --account <alias> course set-access --project-id <project-id> --mode 
 personwise --account <alias> topic submit --project-id <project-id> --json
 ```
 
-Use them only when capabilities, user intent, and fresh state authorize them. Never submit Topics
+Use them only when user intent and fresh state authorize them. Never submit Topics
 without explicit intent, and never describe submission as approval.
 
 After terminal success:
@@ -147,7 +151,7 @@ record and `course snapshot` only when authorized detail is needed. Do not inven
 | Failed run without `retry` | Report the safe server state; do not mutate around it. |
 | Source transfer ambiguous | Use `source status`; never blindly upload again. |
 | 401 or revoked grant | Reauthorize, pin the matching account, then read state before mutation. |
-| Insufficient credit | Stop and report; do not purchase or create another run. |
+| Insufficient credit | Stop before blueprint design and report the returned action; do not purchase or create another run. |
 | 429 / retryable dependency | Honor structured retry timing and reduce concurrency. |
 | Cancellation requested | Use `run cancel`, then poll until terminal; cancellation is cooperative. |
 

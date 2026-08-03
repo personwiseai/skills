@@ -1,124 +1,91 @@
 # Produce the explainer through the PersonWise CLI
 
-## Establish trust, authorization, and account binding
+## Establish only the required connection
 
-Run `personwise version --json`; require software 1.0.1 or newer and CLI contract 1.0. If absent or
-older, explain the user-local executable install and obtain explicit approval, then run the bundled
-`assets/bootstrap.sh --approve-install` or Windows `assets/bootstrap.ps1 --approve-install`. Use
-the returned absolute path. Do not use sudo, modify PATH/policy, overwrite a target, or switch
-origin.
+Run `personwise version --json`; require software 1.1.0 or newer and CLI contract 1.0. If absent or
+old, use the bundled `assets/bootstrap.sh --approve-install` or Windows
+`assets/bootstrap.ps1 --approve-install`. The Host applies its own installation policy; do not add
+a PersonWise confirmation or narrate supply-chain and credential internals on the normal path.
+Never use sudo, modify PATH/policy, overwrite a target, or switch origin.
 
-Run `personwise doctor --service personwise.ai --json`. Stop before mutation if any required
-trust, descriptor, credential-store, contract, or release check fails. The v1.0.1 release has
-founder-approved deferred Apple/Windows native signing; do not claim native
-signing or dismiss an OS warning.
+Check `auth status --json`. If needed, use `auth begin --service personwise.ai --json`, show the
+PersonWise browser URL/code, and keep `auth wait --flow-id <flow-id> --json` active. Never request
+or handle passwords, OTPs, tokens, codes, callback URLs, cookies, or secrets. Pin the alias with
+global `--account <alias>`.
 
-For automation, run `personwise auth begin --service personwise.ai --json`, show the PersonWise
-browser verification URL
-and code, then keep `personwise auth wait --flow-id <flow-id> --json` active. Never request or
-handle passwords, OTPs, tokens, codes, callback URLs, cookies, D16 keys, or secrets.
+Do not run `doctor` or a general `capabilities` preflight. Use `doctor` only when a structured error
+recommends `run_doctor`.
 
-Pin the resulting alias with global `--account <alias>`, verify `auth status`, then run
-`capabilities --json`. Require exact capabilities for create, durable run reads/waits/advances,
-source transfer, snapshot/update, image review/regeneration, presenter/configuration, publish, link
-access, and asset download.
+## Read creation readiness before designing
+
+Run:
+
+```text
+personwise --account <alias> course readiness --json
+```
+
+If blocked, stop before building a blueprint and report the one returned action. Never buy credit.
+The user's request already authorizes creating this explainer and using one existing course credit.
+
+Choose an earned slide count no greater than `max_slides_per_course`. Use the five-job explainer arc
+when supported; with a lower maximum, recompose the whole arc into the available pages. If the user
+requested a larger count, explain the resolved count once. Never promise a count before readiness
+or truncate an already-written longer outline.
 
 ## Keep a secret-free run ledger
 
 Track the blueprint, claim ledger, account alias, run/project IDs, logical idempotency identities,
-source filename/checksum/status, checkpoint/allowed actions, revisions, review findings,
-configuration, and final URLs. Never store tokens, cookies, credential references, upload grants,
-signed URLs, or private resource contents.
+source filename/status, checkpoint/actions, revisions, review findings, configuration, and final
+URLs. Never store tokens, cookies, credential references, upload grants, signed URLs, or private
+resource contents.
 
 ## Create one durable run
 
-After explicit approval to consume one course credit, put a create object in a bounded JSON file:
+Put one create object in a bounded JSON file:
 
 ```text
-desired_slide_count = 5
+desired_slide_count = resolved count from readiness
 knowledge_source_mode = materials_only for strict files, otherwise open
 declared_sources = exact retained strict source count
-distribution_target = link unless the user asked for draft or private
+distribution_target = the explicit user target, otherwise private
 ```
 
-Include this exact Skill attribution only when supported; it is optional telemetry and never blocks
-creation:
+Include this optional telemetry only when supported:
 
 ```json
 {
   "skill_invocation": {
     "skill_id": "personwise-interactive-product-explainer",
-    "skill_version": "2.0.0",
+    "skill_version": "2.1.0",
     "scenario_id": "CF-001"
   }
 }
 ```
 
-Then run:
+Run `course create --input <create.json> --json`, save the run/project IDs, and do not treat
+allocation as completion.
 
-```text
-personwise --account <alias> course create --input <create.json> --json
-```
+## Upload and review
 
-Immediately save the returned run ID. Do not treat allocation as completion.
+Upload each file the user named, attached, or selected with `source add`, then reconcile
+`source status`. Those files and images need no extra approval. An Agent-discovered local file does.
 
-## Upload strict sources
+Use bounded `run wait`, then fresh `run get` and `course snapshot` reads. At Outline, confirm the
+resolved page count and teaching jobs against the claim ledger. At Script, audit every title,
+key-point set, page-text line, and narration sentence. Apply the smallest revision-bound atomic
+correction, fetch fresh state, and call `run advance` only when currently allowed.
 
-For each exact user-approved PDF/PPTX/DOCX/Markdown/TXT path:
+Attach supplied product images in the allowed window. With vision, inspect every slide through
+review sheets, correct content first, regenerate only the complete failed subset, and re-inspect.
+Without vision, require canonical image completion and report `visual_review=not_performed`.
 
-```text
-personwise --account <alias> source add --run-id <run-id> --path <path> --json
-personwise --account <alias> source status --run-id <run-id> --json
-```
+## Finish and recover
 
-The CLI owns file validation, checksum, init, byte upload, ambiguous-result reconciliation, and
-confirmation. Never duplicate an unresolved transfer or relax strict grounding because one source
-failed.
+Use presenter choices only for a concrete user requirement. Keep `run wait` active to terminal
+state. Default omitted visibility to private; complete explicit link/embed/publication requests
+without asking again. Return URLs only when final state proves playability.
 
-## Review Outline and Script
-
-Use bounded `run wait`, then fresh `run get` and `course snapshot` reads. At Outline:
-
-1. Confirm exactly five pages and the approved teaching jobs.
-2. Check every title/key-point set against the claim ledger.
-3. Apply the smallest atomic correction through revision-bound `course update --input`.
-4. Fetch the complete snapshot again.
-
-Call `run advance` only when fresh `allowed_actions` permits it. At Script, audit every title, key
-point, page-text line, and narration sentence against the ledger; remove fabricated specificity and
-qualify only where evidence supports it. Do not add, delete, or reorder pages.
-
-## Attach and review images
-
-Use revision-bound `image attach-reference` only for a user-approved bounded product image in an
-allowed window. Reconcile it before another mutation.
-
-At image readiness, a vision-capable Agent uses `image review-sheet` to download all five pages in
-batches of at most six to new local destinations. Inspect factual implications, legibility,
-composition, continuity, and the no-invented-UI boundary. Correct content first, then run
-revision-bound `image regenerate` once for the complete failed subset with concrete JSON
-instructions, wait for durable state, and re-inspect changed pages.
-
-Without vision, require canonical image completion and report `visual_review=not_performed`; this
-alone is not a publish blocker.
-
-## Configure, publish, and verify
-
-Use `presenter list/preview/select` only for a concrete casting requirement; otherwise accept the
-validated default. Change layout through revision-bound `course configure` only when requested.
-
-Keep `run wait` active to terminal state. Use `course publish` and `course set-access --mode link`
-only when the orchestrator needs a fresh-state repair and the user authorized the target. Read
-`course get` and `course snapshot` afterward. Return public/embed URLs only when the final state
-proves playability.
-
-## Recover safely
-
-- After a timeout or lost response, read state before replaying the exact logical mutation.
-- On revision conflict, fetch a fresh snapshot and merge actual changes.
-- An interrupted `run wait` does not cancel the remote run; resume with the same alias and run ID.
-- Use `run retry` only when fresh state permits it; otherwise report the exact failed state.
-- Honor `Retry-After`; never parallel-hammer one run.
-- Stop for invalid authorization, exhausted credit, missing authoritative source, unsupported
-  required capability, or an explicitly reserved user decision.
-- `auth logout` removes local state; `auth revoke` also revokes the server grant.
+After timeout or an ambiguous response, read state and reuse the same logical idempotency identity.
+Use `run retry` only when fresh state allows it, honor `Retry-After`, and never parallel-hammer a
+run. Stop for structured authentication, credit, authorization-limit, or unsupported-operation
+errors and report only the returned safe action.

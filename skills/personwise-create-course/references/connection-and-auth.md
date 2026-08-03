@@ -1,107 +1,84 @@
-# Install and authorize the PersonWise CLI
+# Connect and authorize the PersonWise CLI
 
-## Use the executable bound to this Skill release
+## Use the executable bound to this Skill
 
-This package uses one reviewed `personwise` executable and the international PersonWise service
-declared in its signed descriptor. There is no endpoint, issuer, resource, download-origin, or
-market selector and no alternate runtime path.
+This package uses the international PersonWise service and one pinned `personwise` CLI. There is
+no alternate endpoint, issuer, resource, origin, credential path, or market fallback.
 
-Start with `personwise version --json`. Require:
-
-```text
-software_version >= 1.0.1
-contract_version == 1.0
-```
-
-If `personwise` is missing or older, tell the user that executable code will be installed and name
-the user-local destination reported by the bundled bootstrap. Obtain explicit approval, then use:
+Run `personwise version --json` and require software version 1.1.0 or newer with CLI contract 1.0.
+If it is missing or old, use the bundled bootstrap:
 
 ```text
 Linux/macOS: assets/bootstrap.sh --approve-install
 Windows:     assets/bootstrap.ps1 --approve-install
 ```
 
-The bootstrap is pinned to the immutable CLI release, signed descriptor, release manifest, target
-size/hash, detached trust root, and declared native-signing policy. It must not use sudo, edit
-PATH/profile/execution policy, start a daemon, follow redirects, resolve `latest`, overwrite an
-occupied path, or run hooks. Invoke the absolute executable path returned in its JSON envelope if
-PATH has not changed. Upgrade and rollback are separate explicit approvals.
+The Host may ask for installation permission under its own policy. The Skill must not add a
+second PersonWise approval or narrate installation internals on the normal path. Never use sudo,
+edit PATH/profile/execution policy, start a daemon, overwrite an occupied path, follow `latest`,
+or use another origin.
 
-The current v1.0.1 release uses `deferred-founder-approved` for Apple/Windows native signing. The
-bootstrap still verifies exact hashes and PersonWise detached signatures; an OS reputation warning
-may appear. Do not claim Apple notarization or Authenticode, and do not make the OS trust decision
-for the user.
-
-Run `<absolute-personwise-path> doctor --service personwise.ai --json`. Stop before mutation if
-any required trust, descriptor, credential-store, contract, or release check fails. Do not write a
-diagnostic bundle unless the user explicitly requests one and approves its path.
+Do not run `doctor` as a prerequisite. Run it only when a structured CLI failure recommends
+`run_doctor`; it is a read-only diagnostic unless the user explicitly requests a bundle path.
 
 ## Authenticate through the browser
 
-For Agent automation, use Device Flow:
+Check `personwise auth status --json`. If needed, use:
 
 ```text
 personwise auth begin --service personwise.ai --json
 personwise auth wait --flow-id <flow-id> --timeout-seconds 1800 --json
 ```
 
-Show the returned `verification_uri_complete` or verification URI plus `user_code` promptly. The
-user signs in, chooses an organization, and approves access in the browser. The Agent never asks
-for or receives a password, OTP, token, authorization code, callback URL, cookie, D16 key, or
-credential-store content.
+Show the returned PersonWise URL and user code promptly. The user signs in, chooses an organization,
+and approves access in the browser. The Agent never asks for or receives a password, OTP, token,
+authorization code, callback URL, cookie, or credential-store content.
 
-Interactive human terminals may use `personwise auth login`. Public Skills never mention or invoke
-test-only authorization modes.
+The CLI owns private user-local credential storage on every supported operating system; Skills and
+Agents never inspect or implement it. Existing pre-1.1.0 logins are not migrated, so complete
+browser OAuth once when no 1.1.0 login is present.
 
-Refresh tokens remain in the operating-system credential store. Headless Linux file storage is
-allowed only through the CLI's explicit opt-in and risk disclosure; never implement credential
-storage in Skill prose or shell commands.
+## Pin the account and check only relevant readiness
 
-## Pin the account and prove capability
+Use global `--account <alias>` on every business command and keep the account bound to this Skill's
+international service. Cross-service state must fail closed.
 
-Read safe local metadata:
+Do not run a general `capabilities` checklist before every task. Query, refine, resume, repair,
+publish, and access tasks go directly to their relevant read/business command, which returns a
+structured unsupported or authorization error when necessary.
+
+Before each new course only, run:
 
 ```text
-personwise account list --json
-personwise --account <alias> account show --alias <alias> --json
-personwise --account <alias> auth status --json
-personwise --account <alias> capabilities --json
+personwise --account <alias> course readiness --json
 ```
 
-Use global `--account <alias>` on every business command. Require the account's public service,
-issuer, resource, organization, and scopes to match the selected authorization and this Skill.
-Cross-service account state must fail closed; never switch service as a fallback.
+Use `can_create`, `max_slides_per_course`, and `authorization_courses_remaining` to decide whether
+and how large a new course can be. Do not infer page count or credit availability before this read.
 
-Before course creation, require named capabilities for durable run creation/read/wait/advance,
-snapshot/update, source transfer when used, image operations when used, presenter/configuration,
-and the requested publication/access target. Require the advertised page/source/file limits.
-Unknown or absent capabilities stop only the affected path before mutation.
+## Authorization boundary
 
-## Approval boundary
+An explicit request to create courses authorizes exactly that course count and the normal existing
+credit consumption. It also authorizes using files and images the user named, attached, or selected.
+Do not ask again before `course create`.
 
-One OAuth grant covers the ordinary course workflow in one organization. It does not authorize
-billing, credit purchase, organization administration, deletion, ownership transfer, direct
-platform-public publication, or Topics approval.
+Require new authorization only for additional courses, payment or credit purchase, broader
+visibility than requested, deletion, ownership transfer, organization administration, or a local
+file the Agent discovered itself. An omitted visibility target is `private`; explicit link access,
+publication, or Topics submission is part of the original request.
 
-Before `course create`, explain the intended page count, that one course credit will be consumed,
-and the final access target; obtain explicit approval. Installation approval and course-credit
-approval are distinct. A prior repository owner authorization cannot be silently reused for an
-unrelated end user's machine or credits.
+## Handle failures once
 
-## Diagnose failures
-
-| Signal | Action |
+| Structured signal | Action |
 |---|---|
-| CLI absent or too old | Explain the pinned user-local install/update and obtain approval; use only the bundled bootstrap. |
-| Bootstrap target occupied | Do not overwrite it; report the absolute path and inspect separately. |
-| Any required `doctor` check unhealthy | Stop mutation and report the failing structured check/action. |
-| Authorization pending | Keep the real `auth wait` active within its timeout. |
-| Authorization denied or expired | Report the exact state; begin one new flow only after the user asks to retry. |
-| 401 after prior success | Allow the CLI refresh path; if still rejected, reauthorize and then read state. |
-| Account/service mismatch | Select an already-bound matching account or reauthorize; never switch endpoint. |
-| Capability unavailable | Stop only the affected workflow and report the missing named capability. |
-| Insufficient credit | Stop before duplicate creation; direct the user to PersonWise billing. |
-| 429 or retryable remote error | Honor the structured retry guidance and `Retry-After`; do not hammer. |
+| CLI absent/old | Use the pinned bootstrap; let the Host apply its install policy. |
+| `AUTHENTICATION_REQUIRED` | Start one browser OAuth flow and keep the wait active. |
+| `LOCAL_CREDENTIALS_UNAVAILABLE` | Report `repair_local_credentials`; do not inspect external credential systems or ask for a system password. |
+| `CREDIT_INSUFFICIENT` | Stop before create and provide the returned credit/purchase action; never purchase automatically. |
+| `AUTHORIZATION_LIMIT_REACHED` | Stop the additional create and report renewal/reauthorization action. |
+| Unsupported operation | Stop only that operation and report the returned safe action. |
+| Retryable remote error | Honor structured retry guidance and `Retry-After`; reuse the same idempotency identity. |
+| `run_doctor` | Run read-only `doctor` once and report only the resulting user action. |
 
 `auth logout` removes local state. `auth revoke` first revokes the server grant and then removes
-local state. Use revoke only when requested; never represent logout as revocation.
+local state; use revoke only when requested.

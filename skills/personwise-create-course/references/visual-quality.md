@@ -2,10 +2,10 @@
 
 ## Decide whether visual review is possible
 
-Claim visual review only when `personwise capabilities --json` advertises review-sheet/download
-support and the current Agent can actually understand the image downloaded by
-`image review-sheet`. Command success, filenames, dimensions, generation state, and an asset
-reference do not prove visual quality.
+Claim visual review only when `image review-sheet` succeeds and the current Agent can actually
+understand the downloaded image. A structured unsupported response stops only visual review;
+command success, filenames, dimensions, generation state, and an asset reference do not prove
+visual quality.
 
 Record one honest result:
 
