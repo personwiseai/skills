@@ -104,8 +104,7 @@ creation:
 {
   "skill_invocation": {
     "skill_id": "personwise-create-course",
-    "skill_version": "2.1.0",
-    "scenario_id": "CORE-001"
+    "skill_version": "2.1.1"
   }
 }
 ```

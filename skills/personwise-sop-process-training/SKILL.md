@@ -51,8 +51,7 @@ When `supports_skill_invocation_attribution=true`, include:
 {
   "skill_invocation": {
     "skill_id": "personwise-sop-process-training",
-    "skill_version": "2.1.0",
-    "scenario_id": "CF-006"
+    "skill_version": "2.1.1"
   }
 }
 ```

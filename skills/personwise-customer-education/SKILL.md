@@ -52,8 +52,7 @@ When `supports_skill_invocation_attribution=true`, include:
 {
   "skill_invocation": {
     "skill_id": "personwise-customer-education",
-    "skill_version": "2.1.0",
-    "scenario_id": "CF-015"
+    "skill_version": "2.1.1"
   }
 }
 ```
