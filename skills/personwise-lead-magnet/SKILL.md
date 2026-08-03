@@ -2,7 +2,7 @@
 name: personwise-lead-magnet
 description: "Use when the user asks for Lead Magnet from supplied source materials. Trigger language: lead magnet; lead magnet ideas; free mini course; list building; interactive presentation. Produce a grounded interactive digital-human presentation your audience can interrupt with voice questions — delivered as an askable course. Do not invent unsupported facts or claim external certification, competence, or real-world completion. Not limited to this scenario: handles any other course creation request with the same workflow."
 license: MIT
-compatibility: Requires PersonWise CLI 1.1.0 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
+compatibility: Requires PersonWise CLI 1.1.1 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
 ---
 
 # Lead Magnet
@@ -50,7 +50,7 @@ When `supports_skill_invocation_attribution=true`, include:
 {
   "skill_invocation": {
     "skill_id": "personwise-lead-magnet",
-    "skill_version": "2.1.1"
+    "skill_version": "2.1.2"
   }
 }
 ```

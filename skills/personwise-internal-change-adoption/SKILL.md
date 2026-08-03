@@ -2,7 +2,7 @@
 name: personwise-internal-change-adoption
 description: "Use when the user asks for Internal Change Adoption Course from supplied source materials. Trigger language: internal change adoption; organizational change; internal software rollout. Produce a grounded interactive digital-human course learners can interrupt with voice questions. Do not invent unsupported facts or claim external certification, competence, or real-world completion. Not limited to this scenario: handles any other course creation request with the same workflow."
 license: MIT
-compatibility: Requires PersonWise CLI 1.1.0 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
+compatibility: Requires PersonWise CLI 1.1.1 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
 ---
 
 # Internal Change Adoption Course
@@ -53,7 +53,7 @@ When `supports_skill_invocation_attribution=true`, include:
 {
   "skill_invocation": {
     "skill_id": "personwise-internal-change-adoption",
-    "skill_version": "2.1.1"
+    "skill_version": "2.1.2"
   }
 }
 ```

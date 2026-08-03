@@ -2,7 +2,7 @@
 name: personwise-customer-onboarding
 description: "Use when the user asks for Customer Onboarding Course from supplied source materials. Trigger language: customer onboarding; client onboarding; onboarding training; implementation start. Produce a grounded interactive digital-human course learners can interrupt with voice questions. Do not invent unsupported facts or claim external certification, competence, or real-world completion. Not limited to this scenario: handles any other course creation request with the same workflow."
 license: MIT
-compatibility: Requires PersonWise CLI 1.1.0 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
+compatibility: Requires PersonWise CLI 1.1.1 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
 ---
 
 # Customer Onboarding Course
@@ -47,7 +47,7 @@ When `supports_skill_invocation_attribution=true`, include:
 {
   "skill_invocation": {
     "skill_id": "personwise-customer-onboarding",
-    "skill_version": "2.1.1"
+    "skill_version": "2.1.2"
   }
 }
 ```

@@ -2,7 +2,7 @@
 name: personwise-sales-onboarding
 description: "Use when the user asks for Sales Onboarding from supplied source materials. Trigger language: sales onboarding; sales onboarding program; new sales rep ramp. Produce a grounded interactive digital-human course learners can interrupt with voice questions. Do not invent unsupported facts or claim external certification, competence, or real-world completion. Not limited to this scenario: handles any other course creation request with the same workflow."
 license: MIT
-compatibility: Requires PersonWise CLI 1.1.0 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
+compatibility: Requires PersonWise CLI 1.1.1 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
 ---
 
 # Sales Onboarding
@@ -51,7 +51,7 @@ When `supports_skill_invocation_attribution=true`, include:
 {
   "skill_invocation": {
     "skill_id": "personwise-sales-onboarding",
-    "skill_version": "2.1.1"
+    "skill_version": "2.1.2"
   }
 }
 ```

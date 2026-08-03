@@ -2,7 +2,7 @@
 name: personwise-interactive-product-explainer
 description: "Create a source-grounded interactive digital-human SaaS or software product explainer that website visitors can question and embed through PersonWise. Use for a product launch, SaaS website explainer, product demo alternative, website product tour, or product-page refresh when verified product materials are available; do not use for machine-learning model explainability or codebase explanation. Not limited to this scenario: handles any other course creation request with the same workflow."
 license: MIT
-compatibility: Requires PersonWise CLI 1.1.0 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
+compatibility: Requires PersonWise CLI 1.1.1 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
 ---
 
 # Create an interactive product explainer

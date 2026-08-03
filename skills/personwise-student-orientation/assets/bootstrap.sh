@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -eu
 
-# Generated from personwise-cli-bootstrap-model.json and the signed v1.1.0
+# Generated from personwise-cli-bootstrap-model.json and the signed v1.1.1
 # release manifest. Embedded trust root: RWQxXCGcBkNBLF/3q1BbM7xZmDxbaY53bjJYcruIuTbK5DYVm+Nm1ztO
 action="${1:-}"
 case "$action" in
@@ -26,47 +26,47 @@ sha256_file() {
 platform="$(uname -s)/$(uname -m)"
 case "$platform" in
   "Linux/x86_64")
-    artifact="personwise_1.1.0_linux_amd64.tar.gz"
-    expected_size="3044225"
-    expected_sha256="25be544fec816d00038d2604b0257484cfc5482f087d13872be3464a222c6831"
+    artifact="personwise_1.1.1_linux_amd64.tar.gz"
+    expected_size="3043888"
+    expected_sha256="921ced6a712ee293abd40ee5b71706463e7100c100a1223d65904aa586b6b73e"
     native_signature_status="not-applicable"
     native_signature_required="false"
     native_identity=""
-    expected_executable_sha256="d07c76359db33a068a10c73e8425495efd3aa294098d5f9451af454a84be5b82"
-    allowed_upgrade_hashes="72daf39da8c5eed46adcab5a20c56cd62b1a58ab0a0f3b44722dd3f05eec6f19 df428672b97a9478d3e66fd3672bcf08ffeff2ebe49bcce27b67dc7d1928bad3"
+    expected_executable_sha256="34bc3cde92441468138d1149b0704823755244fcb678ea0fc402e8ff8d089493"
+    allowed_upgrade_hashes="72daf39da8c5eed46adcab5a20c56cd62b1a58ab0a0f3b44722dd3f05eec6f19 d07c76359db33a068a10c73e8425495efd3aa294098d5f9451af454a84be5b82 df428672b97a9478d3e66fd3672bcf08ffeff2ebe49bcce27b67dc7d1928bad3"
     allowed_rollback_hashes=""
     ;;
   "Linux/arm64")
-    artifact="personwise_1.1.0_linux_arm64.tar.gz"
-    expected_size="2738920"
-    expected_sha256="6bcf2237168af92b1b17f1fb0b67b7d66c6ca346914c9c38d6dd35ef7f997e48"
+    artifact="personwise_1.1.1_linux_arm64.tar.gz"
+    expected_size="2739682"
+    expected_sha256="3ce8a3eed00b405b1e32c623d5da788e4850e182b8f8cf65455637974627f332"
     native_signature_status="not-applicable"
     native_signature_required="false"
     native_identity=""
-    expected_executable_sha256="385730ab4d97b161d4314836e3c4685542d1c7d0a6d00208020b52e2d90a5650"
-    allowed_upgrade_hashes="74a26677ebcda9cd173c0f3bca587d8733e8c302054fae8f5f051ab5e057ff35 96dc5b038e6c81f265bd96ca7933cfb22ffdf0feed05b2785a003ef83d0c467e"
+    expected_executable_sha256="f0c37971f16878a6e33e8bc8562526005b7295aac6047f463ca1c6187b4b01b3"
+    allowed_upgrade_hashes="385730ab4d97b161d4314836e3c4685542d1c7d0a6d00208020b52e2d90a5650 74a26677ebcda9cd173c0f3bca587d8733e8c302054fae8f5f051ab5e057ff35 96dc5b038e6c81f265bd96ca7933cfb22ffdf0feed05b2785a003ef83d0c467e"
     allowed_rollback_hashes=""
     ;;
   "Darwin/x86_64")
-    artifact="personwise_1.1.0_darwin_amd64.tar.gz"
-    expected_size="3074708"
-    expected_sha256="c33ada2c7f800d7387b3a3fdbe204c38bb37044b0712d0563aa6c3b5cea58589"
+    artifact="personwise_1.1.1_darwin_amd64.tar.gz"
+    expected_size="3075466"
+    expected_sha256="6d598cc2cc94f81c21e4154dc7a227db4902dbd23620f0815831ec230e572151"
     native_signature_status="deferred-founder-approved"
     native_signature_required="false"
     native_identity=""
-    expected_executable_sha256="3c4950044f7d89b72876df205d31617ec5b321d1910853ede0c3243e2c56df57"
-    allowed_upgrade_hashes="724918b9a9053d053c7904cf0216fa35926246a052e4faa9b3b4298eb1939cd7 fadbebceff3fc29c598dd50056a6440a1387f8f91fe61b9dfa6a0989d1e5ccaa"
+    expected_executable_sha256="400d84244021b0c0c2e57ec46b28df604b949780bbc02d1e523ba4ff9d6b7779"
+    allowed_upgrade_hashes="3c4950044f7d89b72876df205d31617ec5b321d1910853ede0c3243e2c56df57 724918b9a9053d053c7904cf0216fa35926246a052e4faa9b3b4298eb1939cd7 fadbebceff3fc29c598dd50056a6440a1387f8f91fe61b9dfa6a0989d1e5ccaa"
     allowed_rollback_hashes=""
     ;;
   "Darwin/arm64")
-    artifact="personwise_1.1.0_darwin_arm64.tar.gz"
-    expected_size="2825063"
-    expected_sha256="5b9831c3a0af3c28a750db5c6c61453a69de9bfb42a607eb687639cf81c45c14"
+    artifact="personwise_1.1.1_darwin_arm64.tar.gz"
+    expected_size="2826603"
+    expected_sha256="55b0878cd71858c71978221648eee53f6b71cf19d9d133a46ae293275aba6026"
     native_signature_status="deferred-founder-approved"
     native_signature_required="false"
     native_identity=""
-    expected_executable_sha256="4c4e85be09fbf5c9c53eb6f891cf338c763aa010ed4d985c025eb32152c56056"
-    allowed_upgrade_hashes="1b559f84c6bc141f9f2aa33594f96f5f4a686c83ae981a91137258c9d0acf343 70966e67c279a30c43804ff98325415c4568420128ea6f3ac29fceac88fd30c9"
+    expected_executable_sha256="4e26527da7abe1420b6ba7bbf29b1022a3ab742baa4e8497558ca70986361c14"
+    allowed_upgrade_hashes="1b559f84c6bc141f9f2aa33594f96f5f4a686c83ae981a91137258c9d0acf343 4c4e85be09fbf5c9c53eb6f891cf338c763aa010ed4d985c025eb32152c56056 70966e67c279a30c43804ff98325415c4568420128ea6f3ac29fceac88fd30c9"
     allowed_rollback_hashes=""
     ;;
   *) echo '{"schema_version":"1","ok":false,"error":{"code":"UNSUPPORTED_TARGET","message":"This operating-system target is not supported.","retryable":false,"action":"use_supported_target"},"request_id":"bootstrap-local"}' >&2; exit 9 ;;
@@ -129,7 +129,7 @@ work_dir="$(mktemp -d "$target_dir/.personwise-install.XXXXXX")"
 cleanup() { rm -rf "$work_dir"; }
 trap cleanup EXIT HUP INT TERM
 archive="$work_dir/$artifact"
-url="https://releases.personwise.ai/cli/v1.1.0/$artifact"
+url="https://releases.personwise.ai/cli/v1.1.1/$artifact"
 
 curl --disable --fail --silent --show-error --proto '=https' --tlsv1.2   --connect-timeout 10 --max-time 300 --max-filesize "26214400"   --output "$archive" "$url"
 actual_size="$(wc -c < "$archive" | tr -d ' ')"
@@ -189,5 +189,5 @@ else
   fi
   mv -f "$candidate" "$target_path"
 fi
-printf '{"schema_version":"1","ok":true,"data":{"path":"%s","software_version":"1.1.0","cli_contract_version":"1.0","action":"%s"},"request_id":"bootstrap-local"}
+printf '{"schema_version":"1","ok":true,"data":{"path":"%s","software_version":"1.1.1","cli_contract_version":"1.0","action":"%s"},"request_id":"bootstrap-local"}
 ' "$target_path" "$action"

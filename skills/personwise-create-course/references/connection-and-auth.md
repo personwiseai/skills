@@ -5,7 +5,7 @@
 This package uses the international PersonWise service and one pinned `personwise` CLI. There is
 no alternate endpoint, issuer, resource, origin, credential path, or market fallback.
 
-Run `personwise version --json` and require software version 1.1.0 or newer with CLI contract 1.0.
+Run `personwise version --json` and require software version 1.1.1 or newer with CLI contract 1.0.
 If it is missing or old, use the bundled bootstrap:
 
 ```text
@@ -36,7 +36,7 @@ authorization code, callback URL, cookie, or credential-store content.
 
 The CLI owns private user-local credential storage on every supported operating system; Skills and
 Agents never inspect or implement it. Existing pre-1.1.0 logins are not migrated, so complete
-browser OAuth once when no 1.1.0 login is present.
+browser OAuth once when no compatible local login is present.
 
 ## Pin the account and check only relevant readiness
 
