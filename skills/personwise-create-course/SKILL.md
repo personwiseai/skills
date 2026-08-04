@@ -2,7 +2,7 @@
 name: personwise-create-course
 description: Create, refine, resume, publish, or query polished PersonWise courses from topics, text, PDF/PPTX/DOCX/Markdown/TXT documents, or reference images with the PersonWise CLI. Use for staged course authoring, source-grounded lessons, slide and narration review, visual QA, presenter selection, layout configuration, link sharing, or Topics review submission.
 license: MIT
-compatibility: Requires PersonWise CLI 1.1.1 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
+compatibility: Requires PersonWise CLI 1.1.2 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
 ---
 
 # Create a PersonWise course
@@ -53,7 +53,9 @@ Automation parses only the frozen JSON envelope. Course content is passed only t
 A request to create a course authorizes the requested course count and corresponding existing
 course credit use; do not ask again before `course create` and never purchase credit automatically. Resolve
 the page count only after `course readiness`, using the live maximum. Recompose an oversized request
-to the maximum instead of truncating it. A normal omitted target resolves to `private`; an explicit
+to the maximum instead of truncating it. When the user did not name a visibility target, set
+`distribution_target` to `private` explicitly — an omitted target resolves to the OAuth grant's
+publication ceiling, which can be `link`. An explicit
 link, publish, or Topics request is already authorized. New approval is required for extra courses,
 payment, broader visibility, deletion, ownership transfer, organization administration, or an
 Agent-discovered local file.
@@ -104,7 +106,7 @@ creation:
 {
   "skill_invocation": {
     "skill_id": "personwise-create-course",
-    "skill_version": "2.1.2"
+    "skill_version": "2.1.3"
   }
 }
 ```
@@ -164,8 +166,10 @@ request, not distribution approval.
 
 ## Keep waiting honestly
 
-`running` and `waiting` are normal. Keep a real bounded `run wait` or polling operation active until
-a review checkpoint, terminal state, or legitimate blocker. Never claim background monitoring
+`running` and `waiting` are normal. `run wait` returns on a terminal status and at review
+checkpoints (`paused`), as well as on a timeout/cancel; keep waiting until a review checkpoint,
+terminal state, or legitimate blocker. Older CLI releases do not return at `paused`; there
+`POLL_TIMEOUT` is the checkpoint signal — read fresh `run get` state, then review or resume. Never claim background monitoring
 after the turn ends. A timeout or interrupted wait does not cancel the remote run; resume with the
 same account and `run get`.
 

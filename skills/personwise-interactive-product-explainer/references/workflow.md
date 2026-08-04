@@ -56,7 +56,7 @@ Include this optional telemetry only when supported:
 {
   "skill_invocation": {
     "skill_id": "personwise-interactive-product-explainer",
-    "skill_version": "2.1.2"
+    "skill_version": "2.1.3"
   }
 }
 ```
@@ -69,7 +69,10 @@ allocation as completion.
 Upload each file the user named, attached, or selected with `source add`, then reconcile
 `source status`. Those files and images need no extra approval. An Agent-discovered local file does.
 
-Use bounded `run wait`, then fresh `run get` and `course snapshot` reads. At Outline, confirm the
+Use bounded `run wait`, then fresh `run get` and `course snapshot` reads. `run wait` returns on a
+terminal status and at review checkpoints (`paused`); on older CLI releases it returns only on
+`POLL_TIMEOUT`, which then serves as the checkpoint signal — read fresh state, then review or
+resume. At Outline, confirm the
 resolved page count and teaching jobs against the claim ledger. At Script, audit every title,
 key-point set, page-text line, and narration sentence. Apply the smallest revision-bound atomic
 correction, fetch fresh state, and call `run advance` only when currently allowed.
@@ -81,8 +84,10 @@ Without vision, require canonical image completion and report `visual_review=not
 ## Finish and recover
 
 Use presenter choices only for a concrete user requirement. Keep `run wait` active to terminal
-state. Default omitted visibility to private; complete explicit link/embed/publication requests
-without asking again. Return URLs only when final state proves playability.
+state. Default omitted visibility to an explicit `distribution_target` of `private` — an omitted
+target resolves to the OAuth grant's publication ceiling, which can be `link`; complete explicit
+link/embed/publication requests without asking again. Return URLs only when final state proves
+playability.
 
 After timeout or an ambiguous response, read state and reuse the same logical idempotency identity.
 Use `run retry` only when fresh state allows it, honor `Retry-After`, and never parallel-hammer a

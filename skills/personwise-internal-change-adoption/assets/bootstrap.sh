@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -eu
 
-# Generated from personwise-cli-bootstrap-model.json and the signed v1.1.1
+# Generated from personwise-cli-bootstrap-model.json and the signed v1.1.2
 # release manifest. Embedded trust root: RWQxXCGcBkNBLF/3q1BbM7xZmDxbaY53bjJYcruIuTbK5DYVm+Nm1ztO
 action="${1:-}"
 case "$action" in
@@ -26,47 +26,47 @@ sha256_file() {
 platform="$(uname -s)/$(uname -m)"
 case "$platform" in
   "Linux/x86_64")
-    artifact="personwise_1.1.1_linux_amd64.tar.gz"
-    expected_size="3043888"
-    expected_sha256="921ced6a712ee293abd40ee5b71706463e7100c100a1223d65904aa586b6b73e"
+    artifact="personwise_1.1.2_linux_amd64.tar.gz"
+    expected_size="3043540"
+    expected_sha256="fec68b6b5b693494a4b0ff3c8ff06e7698357501feedad6209abeca132e52d14"
     native_signature_status="not-applicable"
     native_signature_required="false"
     native_identity=""
-    expected_executable_sha256="34bc3cde92441468138d1149b0704823755244fcb678ea0fc402e8ff8d089493"
-    allowed_upgrade_hashes="72daf39da8c5eed46adcab5a20c56cd62b1a58ab0a0f3b44722dd3f05eec6f19 d07c76359db33a068a10c73e8425495efd3aa294098d5f9451af454a84be5b82 df428672b97a9478d3e66fd3672bcf08ffeff2ebe49bcce27b67dc7d1928bad3"
+    expected_executable_sha256="34745a93ed24f86c1dfb5b7ef9110799f8ced0b48bd8038e3af827bb217339b0"
+    allowed_upgrade_hashes="34bc3cde92441468138d1149b0704823755244fcb678ea0fc402e8ff8d089493 72daf39da8c5eed46adcab5a20c56cd62b1a58ab0a0f3b44722dd3f05eec6f19 d07c76359db33a068a10c73e8425495efd3aa294098d5f9451af454a84be5b82 df428672b97a9478d3e66fd3672bcf08ffeff2ebe49bcce27b67dc7d1928bad3"
     allowed_rollback_hashes=""
     ;;
   "Linux/arm64")
-    artifact="personwise_1.1.1_linux_arm64.tar.gz"
-    expected_size="2739682"
-    expected_sha256="3ce8a3eed00b405b1e32c623d5da788e4850e182b8f8cf65455637974627f332"
+    artifact="personwise_1.1.2_linux_arm64.tar.gz"
+    expected_size="2738692"
+    expected_sha256="21914c521aa7844a24f5160069437fb2ece86dbe3d9ef9513c4abbfa07482448"
     native_signature_status="not-applicable"
     native_signature_required="false"
     native_identity=""
-    expected_executable_sha256="f0c37971f16878a6e33e8bc8562526005b7295aac6047f463ca1c6187b4b01b3"
-    allowed_upgrade_hashes="385730ab4d97b161d4314836e3c4685542d1c7d0a6d00208020b52e2d90a5650 74a26677ebcda9cd173c0f3bca587d8733e8c302054fae8f5f051ab5e057ff35 96dc5b038e6c81f265bd96ca7933cfb22ffdf0feed05b2785a003ef83d0c467e"
+    expected_executable_sha256="457a7b132b1aeb673936ac48e1f9ed8419f6da75a64558c79d656ea368bc2d01"
+    allowed_upgrade_hashes="385730ab4d97b161d4314836e3c4685542d1c7d0a6d00208020b52e2d90a5650 74a26677ebcda9cd173c0f3bca587d8733e8c302054fae8f5f051ab5e057ff35 96dc5b038e6c81f265bd96ca7933cfb22ffdf0feed05b2785a003ef83d0c467e f0c37971f16878a6e33e8bc8562526005b7295aac6047f463ca1c6187b4b01b3"
     allowed_rollback_hashes=""
     ;;
   "Darwin/x86_64")
-    artifact="personwise_1.1.1_darwin_amd64.tar.gz"
-    expected_size="3075466"
-    expected_sha256="6d598cc2cc94f81c21e4154dc7a227db4902dbd23620f0815831ec230e572151"
+    artifact="personwise_1.1.2_darwin_amd64.tar.gz"
+    expected_size="3075479"
+    expected_sha256="e91b2b4e62973ed617dc4e2d76f4685b6903655fbbfea2efb95c40d9d7b697b4"
     native_signature_status="deferred-founder-approved"
     native_signature_required="false"
     native_identity=""
-    expected_executable_sha256="400d84244021b0c0c2e57ec46b28df604b949780bbc02d1e523ba4ff9d6b7779"
-    allowed_upgrade_hashes="3c4950044f7d89b72876df205d31617ec5b321d1910853ede0c3243e2c56df57 724918b9a9053d053c7904cf0216fa35926246a052e4faa9b3b4298eb1939cd7 fadbebceff3fc29c598dd50056a6440a1387f8f91fe61b9dfa6a0989d1e5ccaa"
+    expected_executable_sha256="34dd1dc5bb38a83a33c441ad9ec490d0174eb354ec4e9bbdb63c166feddbb4f2"
+    allowed_upgrade_hashes="3c4950044f7d89b72876df205d31617ec5b321d1910853ede0c3243e2c56df57 400d84244021b0c0c2e57ec46b28df604b949780bbc02d1e523ba4ff9d6b7779 724918b9a9053d053c7904cf0216fa35926246a052e4faa9b3b4298eb1939cd7 fadbebceff3fc29c598dd50056a6440a1387f8f91fe61b9dfa6a0989d1e5ccaa"
     allowed_rollback_hashes=""
     ;;
   "Darwin/arm64")
-    artifact="personwise_1.1.1_darwin_arm64.tar.gz"
-    expected_size="2826603"
-    expected_sha256="55b0878cd71858c71978221648eee53f6b71cf19d9d133a46ae293275aba6026"
+    artifact="personwise_1.1.2_darwin_arm64.tar.gz"
+    expected_size="2826774"
+    expected_sha256="2a62e84e03c5aac76a8f75b6384cec382545445713b748c72519f5d4edc15c48"
     native_signature_status="deferred-founder-approved"
     native_signature_required="false"
     native_identity=""
-    expected_executable_sha256="4e26527da7abe1420b6ba7bbf29b1022a3ab742baa4e8497558ca70986361c14"
-    allowed_upgrade_hashes="1b559f84c6bc141f9f2aa33594f96f5f4a686c83ae981a91137258c9d0acf343 4c4e85be09fbf5c9c53eb6f891cf338c763aa010ed4d985c025eb32152c56056 70966e67c279a30c43804ff98325415c4568420128ea6f3ac29fceac88fd30c9"
+    expected_executable_sha256="a7bad519658d85f7c437efdb8552e4294d3e39cd7412ff67f9b089d890b6b35c"
+    allowed_upgrade_hashes="1b559f84c6bc141f9f2aa33594f96f5f4a686c83ae981a91137258c9d0acf343 4c4e85be09fbf5c9c53eb6f891cf338c763aa010ed4d985c025eb32152c56056 4e26527da7abe1420b6ba7bbf29b1022a3ab742baa4e8497558ca70986361c14 70966e67c279a30c43804ff98325415c4568420128ea6f3ac29fceac88fd30c9"
     allowed_rollback_hashes=""
     ;;
   *) echo '{"schema_version":"1","ok":false,"error":{"code":"UNSUPPORTED_TARGET","message":"This operating-system target is not supported.","retryable":false,"action":"use_supported_target"},"request_id":"bootstrap-local"}' >&2; exit 9 ;;
@@ -129,7 +129,7 @@ work_dir="$(mktemp -d "$target_dir/.personwise-install.XXXXXX")"
 cleanup() { rm -rf "$work_dir"; }
 trap cleanup EXIT HUP INT TERM
 archive="$work_dir/$artifact"
-url="https://releases.personwise.ai/cli/v1.1.1/$artifact"
+url="https://releases.personwise.ai/cli/v1.1.2/$artifact"
 
 curl --disable --fail --silent --show-error --proto '=https' --tlsv1.2   --connect-timeout 10 --max-time 300 --max-filesize "26214400"   --output "$archive" "$url"
 actual_size="$(wc -c < "$archive" | tr -d ' ')"
@@ -189,5 +189,5 @@ else
   fi
   mv -f "$candidate" "$target_path"
 fi
-printf '{"schema_version":"1","ok":true,"data":{"path":"%s","software_version":"1.1.1","cli_contract_version":"1.0","action":"%s"},"request_id":"bootstrap-local"}
+printf '{"schema_version":"1","ok":true,"data":{"path":"%s","software_version":"1.1.2","cli_contract_version":"1.0","action":"%s"},"request_id":"bootstrap-local"}
 ' "$target_path" "$action"

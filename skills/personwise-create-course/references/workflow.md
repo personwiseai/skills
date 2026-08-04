@@ -20,7 +20,9 @@ file and pass it through `--input`.
 First run `course readiness --json`. If it is blocked, stop before blueprint design and report the
 returned action. Otherwise resolve `desired_slide_count` from the live maximum, recomposing any
 oversized request rather than truncating it. Then prepare a create object with the blueprint fields,
-`knowledge_source_mode=open`, truthful visual capability, explicit target only when requested, and
+`knowledge_source_mode=open`, truthful visual capability, an explicit `distribution_target`
+(`private` unless the user requested broader access — an omitted target resolves to the OAuth
+grant's publication ceiling, which can be `link`), and
 optional Skill attribution. Run:
 
 ```text
@@ -32,6 +34,7 @@ Save `run_id` immediately. The response allocates durable work; it is not comple
 ## Create a document-backed run
 
 For strict documents, set `materials_only` and the exact retained source count before creation.
+The explicit `distribution_target` rule above applies to every create object.
 For each user-named, attached, or selected PDF, PPTX, DOCX, Markdown, or TXT file (maximum 50 MiB),
 run:
 
@@ -53,6 +56,12 @@ personwise --account <alias> run get --run-id <run-id> --json
 personwise --account <alias> course snapshot --project-id <project-id> --json
 ```
 
+`run wait` exits on a terminal status (`succeeded`, `failed`, `cancelled`) and at review
+checkpoints (`paused`): a paused run cannot progress until the Agent reviews and advances, so
+waiting ends there immediately. It also exits on `POLL_TIMEOUT`/`WAIT_CANCELLED`. Older CLI
+releases do not return at `paused`; there `POLL_TIMEOUT` is the checkpoint signal instead — read
+fresh `run get` state, then review or resume the wait.
+
 At Outline, inspect every stable slide title and key-point set. If objective corrections are
 required, put one atomic patch in JSON and run:
 
@@ -66,6 +75,10 @@ Fetch a complete fresh snapshot, then advance only if permitted:
 ```text
 personwise --account <alias> run advance --run-id <run-id> --json
 ```
+
+`run advance`, `run retry`, and `run cancel` derive a deterministic per-run idempotency key; prefer
+the default and pass `--idempotency-key` only to name one logical mutation with a stable identity,
+reused only with an identical payload.
 
 Repeat at Script, reviewing title, key points, page text, and narration together. Never add/delete/
 reorder slides through this workflow and never chain blind mutations.
@@ -146,6 +159,7 @@ record and `course snapshot` only when authorized detail is needed. Do not inven
 |---|---|
 | Lost response or timeout | Read fresh run/course state. Replay the exact same logical mutation only when state does not prove it completed. |
 | Revision conflict | Fetch a fresh snapshot, merge actual changes, and use the new exact revision. |
+| `CONFLICT` (`read_current_state`) | Call `run get` and inspect fresh `status`/`allowed_actions`; use `source status --run-id` for source states, then act on the new state. If `continue` is still allowed, one bounded retry (wait `poll_after_seconds`, then one `run advance`) is reasonable; if the same conflict repeats after 2-3 spaced attempts, stop and report the exact blocking state. Never create a replacement course or run. |
 | Interrupted `run wait` | The remote run continues; resume with the same account and run ID. |
 | Failed run with `retry` allowed | Invoke `run retry` once with the stable logical identity, then wait/read again. |
 | Failed run without `retry` | Report the safe server state; do not mutate around it. |

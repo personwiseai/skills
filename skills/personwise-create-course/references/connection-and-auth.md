@@ -64,7 +64,9 @@ Do not ask again before `course create`.
 
 Require new authorization only for additional courses, payment or credit purchase, broader
 visibility than requested, deletion, ownership transfer, organization administration, or a local
-file the Agent discovered itself. An omitted visibility target is `private`; explicit link access,
+file the Agent discovered itself. When the user did not name a visibility target, set
+`distribution_target` to `private` explicitly; an omitted target resolves to the OAuth grant's
+publication ceiling, which can be `link`. Explicit link access,
 publication, or Topics submission is part of the original request.
 
 ## Handle failures once

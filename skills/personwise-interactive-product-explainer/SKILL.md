@@ -2,7 +2,7 @@
 name: personwise-interactive-product-explainer
 description: "Create a source-grounded interactive digital-human SaaS or software product explainer that website visitors can question and embed through PersonWise. Use for a product launch, SaaS website explainer, product demo alternative, website product tour, or product-page refresh when verified product materials are available; do not use for machine-learning model explainability or codebase explanation. Not limited to this scenario: handles any other course creation request with the same workflow."
 license: MIT
-compatibility: Requires PersonWise CLI 1.1.1 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
+compatibility: Requires PersonWise CLI 1.1.2 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
 ---
 
 # Create an interactive product explainer
@@ -87,7 +87,9 @@ The required quality gates are:
 7. Generate images. With vision, inspect every slide via review sheets and regenerate the complete
    failed subset with concrete instructions. Without vision, record `not_performed` honestly.
 8. Verify the compatible presenter/voice/configuration and finish the requested target. Default an
-   omitted target to private; honor an explicit link/embed request without another confirmation.
+   omitted target to an explicit `distribution_target` of `private` — an omitted target resolves to
+   the OAuth grant's publication ceiling, which can be `link`; honor an explicit link/embed request
+   without another confirmation.
 
 Never issue two mutations without fresh authoritative reads. Obey the current `allowed_actions`,
 expected revision, structured error classes, and idempotency rules.

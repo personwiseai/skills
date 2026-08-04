@@ -47,7 +47,7 @@ Do not pad. Each page needs one primary teaching job and a reason for its visual
 | `knowledge_source_mode` | `open` or `materials_only`; fixes the factual acquisition boundary. |
 | `declared_sources` | Exact retained document count expected before deferred project creation. |
 | `visual_review_capability` | Declare `multimodal` only when this Agent can truly inspect downloaded review images; otherwise `none`. |
-| `distribution_target` | Optional `draft`, `private`, `link`, or `topics_review`, bounded by OAuth consent and advertised capabilities. |
+| `distribution_target` | `draft`, `private`, `link`, or `topics_review`, bounded by OAuth consent and advertised capabilities. Always set it explicitly: when omitted it resolves to the OAuth grant's publication ceiling, which can be `link`; use `private` unless the user asked for broader access. |
 
 At least one of `topic`, `content`, or a declared source is required. `materials_only` requires at
 least one declared source.

@@ -2,7 +2,7 @@
 name: personwise-community-onboarding
 description: "Use when the user asks for Community Onboarding from supplied source materials. Trigger language: community onboarding; member onboarding; paid community start here. Produce a grounded interactive digital-human course learners can interrupt with voice questions. Do not invent unsupported facts or claim external certification, competence, or real-world completion. Not limited to this scenario: handles any other course creation request with the same workflow."
 license: MIT
-compatibility: Requires PersonWise CLI 1.1.1 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
+compatibility: Requires PersonWise CLI 1.1.2 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
 ---
 
 # Community Onboarding
@@ -52,7 +52,7 @@ When `supports_skill_invocation_attribution=true`, include:
 {
   "skill_invocation": {
     "skill_id": "personwise-community-onboarding",
-    "skill_version": "2.1.2"
+    "skill_version": "2.1.3"
   }
 }
 ```
@@ -99,7 +99,9 @@ broaden visibility beyond the request, delete or transfer ownership, administer 
 or upload a local file the Agent discovered rather than the user named.
 
 Files and reference images named, attached, or explicitly selected by the user are already
-authorized for this course. Default an unspecified access target to `private`. If the user asks for
+authorized for this course. Default an unspecified access target to `private` by setting
+`distribution_target` explicitly in the blueprint — an omitted target resolves to the OAuth grant's
+publication ceiling, which can be `link`. If the user asks for
 link access, publication, or Topics submission, perform that requested target without another
 confirmation; Topics submission is still a review request, not platform approval.
 
@@ -144,7 +146,8 @@ before each create so an earlier course cannot make the next one exceed the live
 ### Build and submit the blueprint
 
 After readiness, record a secret-free blueprint: learner, outcome, teaching arc, factual authority,
-language, resolved page count, visual system, presenter/voice brief, and requested target. Put it in
+language, resolved page count, visual system, presenter/voice brief, and an explicit
+`distribution_target` (`private` unless the user requested broader access). Put it in
 one bounded JSON file and run:
 
 ```text
@@ -174,6 +177,13 @@ personwise --account <alias> run get --run-id <run-id> --json
 personwise --account <alias> course snapshot --project-id <project-id> --json
 ```
 
+`run wait` returns on a terminal status (`succeeded`, `failed`, `cancelled`) and at review
+checkpoints (`paused`): a paused run cannot progress until the Agent reviews and advances, so
+waiting ends there immediately. It also returns on `POLL_TIMEOUT`/`WAIT_CANCELLED`. Older CLI
+releases do not return at `paused`; there `POLL_TIMEOUT` is the checkpoint signal instead — read
+fresh `run get` state, then review or resume the wait. `running` and `waiting` are normal
+in-progress states, not failures.
+
 At Outline, inspect every title and key-point set for one teaching job, progression, coverage,
 factual support, and non-repetition. At Script, review aligned `title`, `key_points`, `page_text`,
 and `script`. Correct only objective factual, source, safety, consistency, or brief failures.
@@ -197,10 +207,19 @@ personality claim from appearance.
 
 ### Finish, recover, and report
 
-Keep bounded `run wait` active until a review checkpoint or terminal state. `running` and `waiting`
-are not failures. On interruption, resume with the same account and `run get`. Use `run retry` only
-when freshly allowed, `run cancel` only when requested, and the same idempotency identity for the
-same logical mutation.
+Use bounded `run wait` until a review checkpoint or terminal state; `running`
+and `waiting` are not failures. On interruption, resume with the same account and `run get`. Use
+`run retry` only when freshly allowed, `run cancel` only when requested, and the same idempotency
+identity for the same logical mutation. `run advance`, `run retry`, and `run cancel` derive a
+deterministic per-run idempotency key; prefer that default and pass `--idempotency-key` only to
+name one logical mutation with a stable identity, reused only with an identical payload.
+
+A `CONFLICT` with action `read_current_state` means read, not retry: run `run get`, inspect fresh
+`status` and `allowed_actions`, check `source status --run-id` for source states, then act on the
+new state. If `continue` is still allowed, one bounded retry — wait `poll_after_seconds`, then one
+`run advance` — is reasonable. If the same conflict repeats after two or three spaced attempts,
+stop and report the exact blocking state; never create a replacement course or run to escape a
+conflict.
 
 Complete the user's requested access/publication target with `course publish`, `course set-access`,
 or `topic submit` when fresh state allows it. After success,
