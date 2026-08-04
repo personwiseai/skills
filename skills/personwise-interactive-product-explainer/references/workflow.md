@@ -2,7 +2,7 @@
 
 ## Establish only the required connection
 
-Run `personwise version --json`; require software 1.1.1 or newer and CLI contract 1.0. If absent or
+Run `personwise version --json`; require software 1.1.2 or newer and CLI contract 1.0. If absent or
 old, use the bundled `assets/bootstrap.sh --approve-install` or Windows
 `assets/bootstrap.ps1 --approve-install`. The Host applies its own installation policy; do not add
 a PersonWise confirmation or narrate supply-chain and credential internals on the normal path.
@@ -56,7 +56,7 @@ Include this optional telemetry only when supported:
 {
   "skill_invocation": {
     "skill_id": "personwise-interactive-product-explainer",
-    "skill_version": "2.1.3"
+    "skill_version": "2.1.4"
   }
 }
 ```

@@ -5,7 +5,7 @@
 This package uses the international PersonWise service and one pinned `personwise` CLI. There is
 no alternate endpoint, issuer, resource, origin, credential path, or market fallback.
 
-Run `personwise version --json` and require software version 1.1.1 or newer with CLI contract 1.0.
+Run `personwise version --json` and require software version 1.1.2 or newer with CLI contract 1.0.
 If it is missing or old, use the bundled bootstrap:
 
 ```text

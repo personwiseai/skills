@@ -53,7 +53,7 @@ When `supports_skill_invocation_attribution=true`, include:
 {
   "skill_invocation": {
     "skill_id": "personwise-product-first-success",
-    "skill_version": "2.1.3"
+    "skill_version": "2.1.4"
   }
 }
 ```

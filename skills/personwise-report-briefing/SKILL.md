@@ -50,7 +50,7 @@ When `supports_skill_invocation_attribution=true`, include:
 {
   "skill_invocation": {
     "skill_id": "personwise-report-briefing",
-    "skill_version": "2.1.3"
+    "skill_version": "2.1.4"
   }
 }
 ```
