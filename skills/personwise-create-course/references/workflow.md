@@ -61,6 +61,24 @@ upload was received and processing started, not that the source is complete); th
 with `phase`, `processed_pages`/`total_pages`, and a safe `error` when failed. Only `ready`
 permits advancing.
 
+If a source fails, read fresh `allowed_actions` from `run get`. When `retry_source` is allowed,
+run once:
+
+```text
+personwise --account <alias> source retry --run-id <run-id> --source-id <source-id> --json
+```
+
+then continue bounded `run wait`/`source status`; if the same error returns, stop and report the
+structured error. When the failed source must be replaced (for example `page_quota_exceeded` and
+a smaller file), detach it first:
+
+```text
+personwise --account <alias> source detach --run-id <run-id> --source-id <source-id> --json
+```
+
+then upload the replacement with `source add`. Never create a replacement run to work around a
+failed source, and never loosen `materials_only`.
+
 ## Wait for and review checkpoints
 
 ```text
@@ -181,6 +199,8 @@ record and `course snapshot` only when authorized detail is needed. Do not inven
 | Interrupted `run wait` | The remote run continues; resume with the same account and run ID. |
 | Failed run with `retry` allowed | Invoke `run retry` once with the stable logical identity, then wait/read again. |
 | Failed run without `retry` | Report the safe server state; do not mutate around it. |
+| Source failed with `retry_source` allowed | Run `source retry --run-id <id> --source-id <id>` once, then bounded `run wait`/`source status`; if the same error returns, stop and report the structured error. |
+| Failed source must be replaced (e.g., `page_quota_exceeded`) | Run `source detach --run-id <id> --source-id <id>` first, then `source add` the replacement file; do not create a second run. |
 | Source transfer ambiguous | Use `source status`; never blindly upload again. |
 | 401 or revoked grant | Reauthorize, pin the matching account, then read state before mutation. |
 | Insufficient credit | Stop before blueprint design and report the returned action; do not purchase or create another run. |

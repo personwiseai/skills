@@ -58,6 +58,21 @@ CLI 校验非 symlink 普通文件、计算校验和、初始化一次传输、�
 以及 `phase`、`processed_pages`/`total_pages` 和失败时的安全 `error`；只有 `status: ready`
 才允许推进。
 
+若来源处理失败，先重新读取 `run get` 的最新 `allowed_actions`。允许 `retry_source` 时执行一次：
+
+```text
+personwise --account <alias> source retry --run-id <run-id> --source-id <source-id> --json
+```
+
+然后继续有界 `run wait`/`source status`；若同一错误再次出现，停止并报告结构化错误。当失败来源
+必须替换（例如 `page_quota_exceeded` 且需要换更小的文件）时，先 detach：
+
+```text
+personwise --account <alias> source detach --run-id <run-id> --source-id <source-id> --json
+```
+
+再用 `source add` 上传替换文件。不得为绕开失败来源另建 run，也不得放宽 `materials_only`。
+
 ## 等待并审阅检查点
 
 ```text
@@ -137,6 +152,8 @@ note）；按返回原样报告。
 | `run wait` 中断 | 远端 run 继续；用同一账户和 run ID 恢复。 |
 | 失败 run 允许 `retry` | 用稳定逻辑身份执行一次 `run retry`，再等待/读取。 |
 | 失败 run 不允许 `retry` | 如实报告安全状态，不绕过服务端直接改。 |
+| 来源失败且允许 `retry_source` | 执行一次 `source retry --run-id <id> --source-id <id>`，再继续有界 `run wait`/`source status`；同一错误再次出现时停止并报告结构化错误。 |
+| 失败来源必须替换（例如 `page_quota_exceeded`） | 先执行 `source detach --run-id <id> --source-id <id>`，再用 `source add` 上传替换文件；不得另建第二个 run。 |
 | 来源传输不确定 | 使用 `source status`，不得盲目重传。 |
 | 授权撤销/401 | 重新授权并固定匹配账户，写操作前再读状态。 |
 | 额度不足 | 停止并报告，不购买、不另建 run。 |

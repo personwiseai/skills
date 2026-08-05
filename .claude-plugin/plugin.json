@@ -1,7 +1,7 @@
 {
   "name": "personwise-create-course",
   "displayName": "Create a PersonWise Course",
-  "version": "1.5.0",
+  "version": "2.1.7",
   "description": "Create polished, interactive PersonWise courses from a topic or materials.",
   "author": {
     "name": "PersonWise",
@@ -16,8 +16,7 @@
     "education",
     "presentations",
     "digital-human",
-    "mcp"
+    "cli"
   ],
-  "defaultEnabled": true,
-  "mcpServers": "./.mcp.json"
+  "defaultEnabled": true
 }

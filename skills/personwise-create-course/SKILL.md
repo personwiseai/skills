@@ -121,7 +121,7 @@ creation:
 {
   "skill_invocation": {
     "skill_id": "personwise-create-course",
-    "skill_version": "2.1.6"
+    "skill_version": "2.1.7"
   }
 }
 ```

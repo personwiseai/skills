@@ -169,6 +169,21 @@ Agent 自己发现的本地文件必须先说明精确文件和用途并取得�
 才允许推进。在同步窗口内，较旧的服务端可能短暂返回 `course_agent_sources_not_ready` 冲突
 而不是 no-op；此时应重新读取 `run get`/`source status` 并继续等待，不要取消或另建 run。
 
+若来源处理失败，先重新读取 `run get` 的最新 `allowed_actions`。允许 `retry_source` 时执行一次：
+
+```text
+personwise --account <alias> source retry --run-id <run-id> --source-id <source-id> --json
+```
+
+然后继续有界 `run wait`/`source status`；若同一错误再次出现，停止并报告结构化错误。当失败来源
+必须替换（例如 `page_quota_exceeded` 且需要换更小的文件）时，先 detach：
+
+```text
+personwise --account <alias> source detach --run-id <run-id> --source-id <source-id> --json
+```
+
+再用 `source add` 上传替换文件。不得为绕开失败来源另建 run，也不得放宽 `materials_only`。
+
 ### 审阅持久检查点
 
 使用有界 `run wait` 等待检查点或终态：`run wait` 在终态（`succeeded`、`failed`、

@@ -51,7 +51,7 @@ When `supports_skill_invocation_attribution=true`, include:
 {
   "skill_invocation": {
     "skill_id": "personwise-sales-enablement-training",
-    "skill_version": "2.1.6"
+    "skill_version": "2.1.7"
   }
 }
 ```
@@ -202,6 +202,24 @@ with `phase`, `processed_pages`/`total_pages`, and a safe `error` when failed. O
 permits advancing. During the sync window an older server may briefly return a
 `course_agent_sources_not_ready` conflict instead of a no-op; read fresh `run get`/`source status`
 and keep waiting rather than cancelling or creating a replacement run.
+
+If a source fails, read fresh `allowed_actions` from `run get`. When `retry_source` is allowed,
+run once:
+
+```text
+personwise --account <alias> source retry --run-id <run-id> --source-id <source-id> --json
+```
+
+then continue bounded `run wait`/`source status`; if the same error returns, stop and report the
+structured error. When the failed source must be replaced (for example `page_quota_exceeded` and
+a smaller file), detach it first:
+
+```text
+personwise --account <alias> source detach --run-id <run-id> --source-id <source-id> --json
+```
+
+then upload the replacement with `source add`. Never create a replacement run to work around a
+failed source, and never loosen `materials_only`.
 
 ### Review the durable checkpoints
 
