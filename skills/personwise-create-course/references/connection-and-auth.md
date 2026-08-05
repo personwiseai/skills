@@ -5,7 +5,7 @@
 This package uses the international PersonWise service and one pinned `personwise` CLI. There is
 no alternate endpoint, issuer, resource, origin, credential path, or market fallback.
 
-Run `personwise version --json` and require software version 1.1.2 or newer with CLI contract 1.0.
+Run `personwise version --json` and require software version 1.1.6 or newer with CLI contract 1.0.
 If it is missing or old, use the bundled bootstrap:
 
 ```text
@@ -24,27 +24,38 @@ Do not run `doctor` as a prerequisite. Run it only when a structured CLI failure
 ## Update discipline — keep the CLI and this Skill current
 
 This is a standing discipline, not optional maintenance: the Skill and the CLI are one governed
-pair and must stay aligned before any business command.
+pair and must stay aligned before any business command. PersonWise ratchets minimum versions to
+the current release, so an outdated CLI or Skill is normally unusable rather than merely stale.
 
-PersonWise ships Skill and CLI updates continuously. Every successful CLI response may carry a
-top-level `updates` block. Handle it deterministically:
+Before the first business command, run this freshness check once:
 
-- If `updates.cli.status` or `updates.skill.status` is `update_available`, tell the user once
-  which component is outdated (installed versus latest) and quote the exact `action` command.
-  Ask whether to update now. With approval, run exactly that command; it already carries the
-  required `--approve-upgrade` argument. After a successful update, continue the original task.
-  If the user declines, continue the task and do not ask again in this session.
+```text
+personwise update check --service personwise.ai --json
+```
+
+Every status other than `up_to_date` is stop-until-updated, except `no_active_release`, which
+means no release is published yet: in that case continue and rely on service responses. Every
+successful CLI response may also carry a top-level `updates` block. Handle it deterministically:
+
+- If `updates.cli.status` or `updates.skill.status` is `update_available` or `below_minimum`,
+  tell the user once which component is outdated (installed versus latest) and quote the exact
+  `action` command. The task cannot continue until that update is installed. Ask for approval;
+  with approval, run exactly that command (it already carries the required `--approve-upgrade`
+  argument). If the user declines, stop and do not run business commands with the outdated
+  component, and do not ask again in this session unless the user changes that decision.
 - If a command fails with `CLI_VERSION_BELOW_MINIMUM` or `SKILL_VERSION_BELOW_MINIMUM`, the task
   cannot continue until the update is installed. Explain this, ask for approval, run exactly the
   printed update command, then retry the failed step once.
+- When both are outdated, update the CLI first, then the Skill.
 
 When the `action` is `personwise update skill --at <skill-directory> --approve-upgrade`, replace
 `<skill-directory>` with the directory of this installed Skill (the directory containing this
-Skill's SKILL.md). Never run `doctor` or any preflight checklist just to check freshness, never
-ask more than once per session, and never substitute another command, flag, origin, or download
-path for the printed `action`. If the CLI answers `Unknown command` for `personwise update`, the
-installed CLI predates this Skill's update tooling: upgrade the CLI with this Skill's bundled
-bootstrap instead (`assets/bootstrap.sh --approve-upgrade` on Linux/macOS,
+Skill's SKILL.md). Never run `doctor` or a generic capability preflight to check freshness; the
+`update check` command above is the freshness check. Never ask more than once per component per
+session, and never substitute another command, flag, origin, or download path for the printed
+`action`. If the CLI answers `Unknown command` for `personwise update`, the installed CLI
+predates this Skill's update tooling: upgrade the CLI with this Skill's bundled bootstrap
+instead (`assets/bootstrap.sh --approve-upgrade` on Linux/macOS,
 `assets/bootstrap.ps1 --approve-upgrade` on Windows; use `--approve-install` when no recognized
 executable exists), then retry the failed step once. Reinstalling the Skill alone does not update
 the CLI. If the service returns `SERVICE_RESPONSE_MISMATCH` while the installed CLI is older than

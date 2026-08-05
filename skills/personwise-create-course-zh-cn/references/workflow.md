@@ -129,8 +129,10 @@ personwise --account <alias> course publish --project-id <project-id> --json
 personwise --account <alias> course set-access --project-id <project-id> --mode private|link --json
 ```
 
-中国区包不调用或承诺国际 Topics。终态后读取 `course get` 与 `course snapshot`，只有状态证明
-链接访问和可播放时才报告公开链接。
+中国区包不调用或承诺国际 Topics。终态后读取 `course get` 与 `course snapshot`，按最终访问模式
+交付对应链接：`access_mode=link` 时给出 `share_url` 公开链接；`access_mode=private` 时给出
+`editor_url` 需登录后浏览的链接，并明确说明外人无法打开。用户需要分享私有课程时，先开启链接
+访问或请求 Agent 用 `course set-access` 代为开启；只有状态证明可播放时才报告链接。
 
 失败的 run 会通过 `run get` 返回安全 `error`；发布被阻塞时 `course publish` 返回
 `requirements` 清单；`topic submit`/`topic status` 返回 `submission`（含 message/review

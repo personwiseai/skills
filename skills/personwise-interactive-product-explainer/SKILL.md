@@ -2,7 +2,7 @@
 name: personwise-interactive-product-explainer
 description: "Create a source-grounded interactive digital-human SaaS or software product explainer that website visitors can question and embed through PersonWise. Use for a product launch, SaaS website explainer, product demo alternative, website product tour, or product-page refresh when verified product materials are available; do not use for machine-learning model explainability or codebase explanation. Not limited to this scenario: handles any other course creation request with the same workflow."
 license: MIT
-compatibility: Requires PersonWise CLI 1.1.2 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
+compatibility: Requires PersonWise CLI 1.1.6 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
 ---
 
 # Create an interactive product explainer
@@ -100,7 +100,9 @@ expected revision, structured error classes, and idempotency rules.
 The task is complete only when final PersonWise state proves the result. Return the teaching arc,
 source boundary, run/project IDs, terminal checkpoint, content/visual review status, omitted or
 qualified claims, presenter/voice/configuration evidence, and publication/access/playability state.
-Return public/embed URLs only when the course reports them as playable.
+Return the URL that matches the final access mode and only when the course reports playability:
+`access_mode=link` gives the public `share_url`; `access_mode=private` gives the login-required
+`editor_url` and must be described as viewable only after login, and state clearly that outsiders cannot open it.
 
 Do not claim conversion lift, visitor understanding, or question-answer accuracy without observed
 evidence.

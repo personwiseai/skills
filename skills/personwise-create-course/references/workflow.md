@@ -177,7 +177,11 @@ personwise --account <alias> course get --project-id <project-id> --json
 personwise --account <alias> course snapshot --project-id <project-id> --json
 ```
 
-Report a share URL only when the returned course state proves link access and playability.
+Report the URL that matches the final access mode: for `access_mode=link`, give `share_url` as the
+public link; for `access_mode=private`, give `editor_url` as the login-required view link and state
+that outsiders cannot open it. If the user wants to share a private course, enable link access or
+ask the Agent to change it with `course set-access`. Report a link URL only when the returned state
+proves playability.
 
 Failed runs expose the safe `error` object through `run get`, a blocked publish returns
 `requirements`, and `topic submit`/`topic status` return `submission` with any message or

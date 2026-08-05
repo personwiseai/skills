@@ -453,9 +453,9 @@ authentication uses browser OAuth and credentials never belong in this repositor
 
 ## Current release
 
-- Bundle: `2.1.7`
-- Tag: `v2.1.7`
-- Core Skill: `personwise-create-course` `2.1.7`
+- Bundle: `2.1.8`
+- Tag: `v2.1.8`
+- Core Skill: `personwise-create-course` `2.1.8`
 - Install page: https://personwise.ai/skills/personwise-create-course
 - Support: support@personwise.ai
 - Privacy: https://personwise.ai/privacy

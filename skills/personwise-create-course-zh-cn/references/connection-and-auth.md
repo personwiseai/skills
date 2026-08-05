@@ -5,7 +5,7 @@
 本包固定使用中国区 PersonWise 服务和一个固定版本的 `personwise` CLI，不存在备用端点、
 issuer、resource、下载源、凭据路径或跨市场回退。
 
-运行 `personwise version --json`，要求软件版本不低于 1.1.0、CLI 合同为 1.0。缺失或过旧时：
+运行 `personwise version --json`，要求软件版本不低于 1.1.6、CLI 合同为 1.0。缺失或过旧时：
 
 ```text
 Linux/macOS: assets/bootstrap.sh --approve-install
@@ -22,28 +22,38 @@ Windows:     assets/bootstrap.ps1 --approve-install
 ## 更新纪律 —— 保持 CLI 与本 Skill 为最新版本
 
 这是常设纪律，不是可选的维护动作：技能与 CLI 是一个受治理的整体，任何业务命令之前都必须
-保持二者对齐。
+保持二者对齐。PersonWise 会把最低版本随当前发布同步抬升，因此过旧的 CLI 或技能通常不是
+“略旧”，而是不可用。
 
-PersonWise 会持续发布 Skill 与 CLI 更新。每个成功的 CLI 响应可能携带顶层 `updates` 块，按以下
-确定规则处理：
+首个业务命令前，先运行一次以下新鲜度检查：
 
-- 若 `updates.cli.status` 或 `updates.skill.status` 为 `update_available`：向用户说明一次哪个
-  组件过旧（installed 与 latest），并原样引用其中的 `action` 命令，询问是否现在更新。获得同意
-  后，原样执行该命令（命令本身已带所需的 `--approve-upgrade` 参数）；更新成功后继续原任务。
-  用户拒绝时继续任务，本会话内不再询问。
+```text
+personwise update check --service personwise.cn --json
+```
+
+除 `up_to_date` 以外的状态都按“停止直到更新完成”处理；`no_active_release` 表示该市场尚未
+发布任何版本，此时继续并依赖服务端响应。每个成功的 CLI 响应还可能携带顶层 `updates` 块，
+按以下确定规则处理：
+
+- 若 `updates.cli.status` 或 `updates.skill.status` 为 `update_available` 或 `below_minimum`：
+  向用户说明一次哪个组件过旧（installed 与 latest），并原样引用其中的 `action` 命令。任务
+  必须等该更新安装完成才能继续。询问是否现在更新；获得同意后，原样执行该命令（命令本身已带
+  所需的 `--approve-upgrade` 参数）。用户拒绝时停止任务，不得用过旧组件运行业务命令，本会话
+  内不再询问，除非用户改变决定。
 - 若命令以 `CLI_VERSION_BELOW_MINIMUM` 或 `SKILL_VERSION_BELOW_MINIMUM` 失败：必须先完成更新
   才能继续。说明原因，请求批准，原样执行打印的更新命令，然后重试失败的步骤一次。
+- 两者都过旧时，先升级 CLI，再升级技能。
 
 当 `action` 为 `personwise update skill --at <skill-directory> --approve-upgrade` 时，把
 `<skill-directory>` 替换为本 Skill 的安装目录（即本 Skill 的 SKILL.md 所在目录）。不得为了检查
-新版本而运行 `doctor` 或任何前置检查清单；每会话最多询问一次；不得用其他命令、参数、来源或下载
-路径替换打印的 `action`。若 CLI 对 `personwise update` 报 `Unknown command`，说明当前 CLI 旧于
-本 Skill 的更新工具：改用本 Skill 自带的固定引导脚本升级 CLI（Linux/macOS 为
-`assets/bootstrap.sh --approve-upgrade`，Windows 为 `assets/bootstrap.ps1 --approve-upgrade`；
-没有可识别安装时用 `--approve-install`），然后重试失败的步骤一次。仅重新安装 Skill 不会升级
-CLI。若已安装 CLI 旧于引导脚本锁定的版本时服务返回 `SERVICE_RESPONSE_MISMATCH`，应先用固定
-引导脚本升级 CLI 并重试一次；只有当前锁定版本的 CLI 仍然不匹配时才报告
-`stop_and_verify_service`。
+新版本而运行 `doctor` 或通用能力前置清单；上面的 `update check` 就是新鲜度检查。每个组件每
+会话最多询问一次；不得用其他命令、参数、来源或下载路径替换打印的 `action`。若 CLI 对
+`personwise update` 报 `Unknown command`，说明当前 CLI 旧于本 Skill 的更新工具：改用本 Skill
+自带的固定引导脚本升级 CLI（Linux/macOS 为 `assets/bootstrap.sh --approve-upgrade`，Windows
+为 `assets/bootstrap.ps1 --approve-upgrade`；没有可识别安装时用 `--approve-install`），然后
+重试失败的步骤一次。仅重新安装 Skill 不会升级 CLI。若已安装 CLI 旧于引导脚本锁定的版本时服务
+返回 `SERVICE_RESPONSE_MISMATCH`，应先用固定引导脚本升级 CLI 并重试一次；只有当前锁定版本的
+CLI 仍然不匹配时才报告 `stop_and_verify_service`。
 
 ## 通过浏览器授权
 

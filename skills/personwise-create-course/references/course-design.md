@@ -237,4 +237,5 @@ Before finishing, require:
 - successful first publish when authorized;
 - link visibility only when requested/resolved;
 - `playable=true` before reporting public or embed URLs;
+- private delivery gives the login-required `editor_url` and never calls it a share link;
 - Topics state described as a pending/reviewed submission, never as automatic distribution.
