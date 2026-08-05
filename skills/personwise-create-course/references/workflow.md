@@ -48,6 +48,19 @@ uploads bytes without sending the bearer token to object storage, reconciles amb
 results, and confirms canonical state. Do not issue another upload until the first is reconciled.
 Never loosen `materials_only` because one source failed.
 
+After upload, do not call `run advance` while any source is `pending` or `processing`. The run stays
+at `awaiting_sources` until every declared source is canonically `ready`; during that window
+`run advance` is a 200 no-op (it returns the current run state without claiming or changing the
+run) and `allowed_actions` does not yet include `continue`. Keep bounded `run wait` and
+`source status`; server-orchestrated runs auto-continue once sources complete. For guided runs,
+call `run advance` only after a fresh read shows every source `ready`.
+
+`source status` reports the upload ticket lifecycle as `ticket_status` (`consumed` means the
+upload was received and processing started, not that the source is complete); the canonical
+`status` field is the source processing state (`pending`, `processing`, `ready`, or `failed`),
+with `phase`, `processed_pages`/`total_pages`, and a safe `error` when failed. Only `ready`
+permits advancing.
+
 ## Wait for and review checkpoints
 
 ```text
@@ -148,6 +161,10 @@ personwise --account <alias> course snapshot --project-id <project-id> --json
 
 Report a share URL only when the returned course state proves link access and playability.
 
+Failed runs expose the safe `error` object through `run get`, a blocked publish returns
+`requirements`, and `topic submit`/`topic status` return `submission` with any message or
+review note; report them exactly as returned.
+
 ## Query courses
 
 Use `course list --limit <1-100> --json` and preserve its opaque cursor. Use `course get` for one
@@ -160,6 +177,7 @@ record and `course snapshot` only when authorized detail is needed. Do not inven
 | Lost response or timeout | Read fresh run/course state. Replay the exact same logical mutation only when state does not prove it completed. |
 | Revision conflict | Fetch a fresh snapshot, merge actual changes, and use the new exact revision. |
 | `CONFLICT` (`read_current_state`) | Call `run get` and inspect fresh `status`/`allowed_actions`; use `source status --run-id` for source states, then act on the new state. If `continue` is still allowed, one bounded retry (wait `poll_after_seconds`, then one `run advance`) is reasonable; if the same conflict repeats after 2-3 spaced attempts, stop and report the exact blocking state. Never create a replacement course or run. |
+| Sources still `pending`/`processing` at `awaiting_sources` | `run advance` returns the current run state as a 200 no-op and `allowed_actions` omits `continue` until every declared source is `ready` | Keep bounded `run wait` and `source status`; server-orchestrated runs auto-continue once sources complete. This is normal processing, not a deadlock; do not stop, cancel, or create a replacement run. |
 | Interrupted `run wait` | The remote run continues; resume with the same account and run ID. |
 | Failed run with `retry` allowed | Invoke `run retry` once with the stable logical identity, then wait/read again. |
 | Failed run without `retry` | Report the safe server state; do not mutate around it. |

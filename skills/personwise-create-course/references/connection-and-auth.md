@@ -21,6 +21,28 @@ or use another origin.
 Do not run `doctor` as a prerequisite. Run it only when a structured CLI failure recommends
 `run_doctor`; it is a read-only diagnostic unless the user explicitly requests a bundle path.
 
+## Keep the CLI and this Skill current
+
+PersonWise ships Skill and CLI updates continuously. Every successful CLI response may carry a
+top-level `updates` block. Handle it deterministically:
+
+- If `updates.cli.status` or `updates.skill.status` is `update_available`, tell the user once
+  which component is outdated (installed versus latest) and quote the exact `action` command.
+  Ask whether to update now. With approval, run exactly that command; it already carries the
+  required `--approve-upgrade` argument. After a successful update, continue the original task.
+  If the user declines, continue the task and do not ask again in this session.
+- If a command fails with `CLI_VERSION_BELOW_MINIMUM` or `SKILL_VERSION_BELOW_MINIMUM`, the task
+  cannot continue until the update is installed. Explain this, ask for approval, run exactly the
+  printed update command, then retry the failed step once.
+
+When the `action` is `personwise update skill --at <skill-directory> --approve-upgrade`, replace
+`<skill-directory>` with the directory of this installed Skill (the directory containing this
+Skill's SKILL.md). Never run `doctor` or any preflight checklist just to check freshness, never
+ask more than once per session, and never substitute another command, flag, origin, or download
+path for the printed `action`. If the CLI answers `Unknown command` for `personwise update`, the
+installed CLI predates this Skill's update tooling: stop and tell the user to reinstall the Skill
+from its official listing.
+
 ## Authenticate through the browser
 
 Check `personwise auth status --json`. If needed, use:

@@ -32,7 +32,8 @@ source. Use exact dates when “current” could become ambiguous.
 
 Use `materials_only` when the user supplies authoritative PDF, PPTX, DOCX, Markdown, or TXT files
 and the course must stay within them. Set `declared_sources` to the exact retained count, upload all
-documents, and wait for canonical processing before advancing.
+documents, and wait for canonical processing before advancing; while any source is `pending` or
+`processing`, `run advance` is a 200 no-op and `allowed_actions` omits `continue`.
 
 When supported, a concise UTF-8 Markdown or TXT product brief assembled only from verified facts is
 the preferred source for a website explainer. It should contain the claim ledger's allowed wording,

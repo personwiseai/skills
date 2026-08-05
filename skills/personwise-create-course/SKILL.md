@@ -106,7 +106,7 @@ creation:
 {
   "skill_invocation": {
     "skill_id": "personwise-create-course",
-    "skill_version": "2.1.4"
+    "skill_version": "2.1.5"
   }
 }
 ```
@@ -114,6 +114,9 @@ creation:
 For designated documents, use `source add --run-id <run-id> --path <exact-path> --json`, then
 `source status`. Files the user named may be uploaded directly; Agent-discovered files require
 disclosure and approval first. Never expose upload grants, signed URLs, or private contents.
+
+While any source is `pending` or `processing`, do not call `run advance`: the run stays at
+`awaiting_sources` and advancing is a 200 no-op until every declared source is canonically `ready`.
 
 ### 3. Wait and review content
 
@@ -149,7 +152,9 @@ visibility.
 
 After success, read `course get` and `course snapshot`. Report public/share URLs only when the
 returned state proves publication, link access, and playability. Topics submission is a review
-request, not distribution approval.
+request, not distribution approval. A blocked publish returns `requirements`, a failed run
+exposes the safe `error`, and a topic submission returns `submission` with any message or
+review note; report them exactly as returned.
 
 ## Preserve state and recover precisely
 

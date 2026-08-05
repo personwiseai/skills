@@ -51,7 +51,7 @@ When `supports_skill_invocation_attribution=true`, include:
 {
   "skill_invocation": {
     "skill_id": "personwise-sop-process-training",
-    "skill_version": "2.1.4"
+    "skill_version": "2.1.5"
   }
 }
 ```
@@ -88,6 +88,28 @@ validate trust, contract, authorization, limits, and idempotency inside the rele
 Run `doctor` only when a structured failure explicitly recommends `run_doctor`; then report only
 the one action the user can take. All automation uses `--json`; pass course content only through
 `--input <file|->`, never through shell interpolation.
+
+### Keep the CLI and this Skill current
+
+PersonWise ships Skill and CLI updates continuously. Every successful CLI response may carry a
+top-level `updates` block. Handle it deterministically:
+
+- If `updates.cli.status` or `updates.skill.status` is `update_available`, tell the user once
+  which component is outdated (installed versus latest) and quote the exact `action` command.
+  Ask whether to update now. With approval, run exactly that command; it already carries the
+  required `--approve-upgrade` argument. After a successful update, continue the original task.
+  If the user declines, continue the task and do not ask again in this session.
+- If a command fails with `CLI_VERSION_BELOW_MINIMUM` or `SKILL_VERSION_BELOW_MINIMUM`, the task
+  cannot continue until the update is installed. Explain this, ask for approval, run exactly the
+  printed update command, then retry the failed step once.
+
+When the `action` is `personwise update skill --at <skill-directory> --approve-upgrade`, replace
+`<skill-directory>` with the directory of this installed Skill (the directory containing this
+Skill's SKILL.md). Never run `doctor` or any preflight checklist just to check freshness, never
+ask more than once per session, and never substitute another command, flag, origin, or download
+path for the printed `action`. If the CLI answers `Unknown command` for `personwise update`, the
+installed CLI predates this Skill's update tooling: stop and tell the user to reinstall the Skill
+from its official listing.
 
 ### Interpret authorization once
 
@@ -166,6 +188,19 @@ personwise --account <alias> source status --run-id <run-id> --json
 If the Agent discovered a local file itself, disclose the exact file and purpose and obtain
 approval before upload. Never expose upload grants, signed URLs, or local source contents.
 
+After upload, do not call `run advance` while any source is `pending` or `processing`. The run
+stays at `awaiting_sources` until every declared source is canonically `ready`; during that window
+`run advance` is a 200 no-op (it returns the current run state without claiming or changing the
+run) and `allowed_actions` does not yet include `continue`. Keep bounded `run wait` and
+`source status`; server-orchestrated runs auto-continue once sources complete. For guided runs,
+call `run advance` only after a fresh read shows every source `ready`.
+
+`source status` reports the upload ticket lifecycle as `ticket_status` (`consumed` means the
+upload was received and processing started, not that the source is complete); the canonical
+`status` field is the source processing state (`pending`, `processing`, `ready`, or `failed`),
+with `phase`, `processed_pages`/`total_pages`, and a safe `error` when failed. Only `ready`
+permits advancing.
+
 ### Review the durable checkpoints
 
 Use bounded waiting and authoritative reads:
@@ -219,6 +254,16 @@ new state. If `continue` is still allowed, one bounded retry — wait `poll_afte
 `run advance` — is reasonable. If the same conflict repeats after two or three spaced attempts,
 stop and report the exact blocking state; never create a replacement course or run to escape a
 conflict.
+
+Sources still `pending` or `processing` at `awaiting_sources` are normal processing, not a
+conflict: `run advance` returns the current run state as a 200 no-op and `allowed_actions` omits
+`continue` until every declared source is `ready`. Keep bounded `run wait` and `source status`;
+server-orchestrated runs auto-continue once sources complete. Do not stop, cancel, or create a
+replacement run.
+
+Failed runs expose the safe `error` object through `run get`, a blocked publish returns
+`requirements`, and `topic submit`/`topic status` return `submission` with any message or
+review note; report them exactly as returned.
 
 Complete the user's requested access/publication target with `course publish`, `course set-access`,
 or `topic submit` when fresh state allows it. After success,

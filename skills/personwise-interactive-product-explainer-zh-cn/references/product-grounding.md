@@ -2,7 +2,7 @@
 
 ## 建立 claim ledger
 
-调用 `create_course` 前，列出允许出现在产品介绍中的主张。每条记录：
+调用 `course create` 前，列出允许出现在产品介绍中的主张。每条记录：
 
 ```text
 主张
@@ -31,7 +31,8 @@ claim ledger 是临时工作状态，不是课程文案。不得记录凭据、�
 
 用户提供 PDF、PPTX、DOCX、Markdown 或 TXT，且要求全部事实来自这些资料时，使用
 `materials_only`。`declared_sources` 必须等于实际保留的资料数量；等待每份文档完成权威处理后
-再推进。
+再推进。来源处于 `pending`/`processing` 时，`run advance` 是 200 无操作且 `allowed_actions`
+不含 `continue`。
 
 网站产品介绍优先使用只包含已核实事实的简洁 UTF-8 Markdown/TXT brief，内容包括允许表述、
 目标用户、真实流程、证据、限制和 CTA。

@@ -37,6 +37,16 @@ Create, review, and publish a polished interactive PersonWise course from a topi
 npx skills add personwiseai/skills --skill personwise-create-course
 ```
 
+### 创建 PersonWise 课程
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+从主题、文本、文档或参考图片出发，通过 PersonWise CLI 和浏览器 OAuth，生成并审阅大纲、讲稿、幻灯片视觉、主讲人与配置，最终交付草稿、私有课程或中国区公开链接。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-create-course-zh-cn
+```
+
 ### Interactive Product Explainer
 
 Market variant: `en-global` (`en`, International English)
@@ -45,6 +55,16 @@ Product videos are expensive and one-way. Turn verified SaaS or software product
 
 ```bash
 npx skills add personwiseai/skills --skill personwise-interactive-product-explainer
+```
+
+### 创建可问答的产品介绍
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+产品视频制作昂贵，而且观众只能单向观看。把官网、产品手册、发布资料等可信来源制作成可通过链接分享、观众可随时语音提问的数字人互动产品介绍；不得编造界面、功能、客户、价格、集成、指标、资质或路线图。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-interactive-product-explainer-zh-cn
 ```
 
 ### Customer Education
@@ -237,15 +257,205 @@ End users learn systems from whoever sits nearby — and their mistakes become y
 npx skills add personwiseai/skills --skill personwise-end-user-software-training
 ```
 
+### 客户支持教育
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+客户总在问同样的问题，每一次重复回答都在消耗支持时间。把帮助内容和产品知识变成一门数字人互动客户教育课程，自己回答学习者的问题——成为帮助中心、客户门户或 CSM 跟进的客户学院资产。账户特定诊断永远回到人工支持。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-customer-education-zh-cn
+```
+
+### 客户 Onboarding
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+每个新客户都问同样的第一周问题，团队一单一单地接电话回答。把已确认的 Onboarding 材料变成一门数字人互动课程，带新客户从注册走到首次价值，沿途回答问题。只建立在已确认的范围、时间表和支持渠道之上——绝不编造承诺。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-customer-onboarding-zh-cn
+```
+
+### 产品首次成功
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+新用户在首次成功之前就卡住，每一次卡住的设置都在消耗激活率。把设置指南和说明书变成一门数字人互动快速上手课程，带用户走到首次成功使用，沿途回答问题。高风险步骤永远指路现场有资质人员确认——课程负责引导，绝不认证。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-product-first-success-zh-cn
+```
+
+### 销售与 GTM 就绪
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+销售会复述发布 deck 里的一切——包括没人批准过的部分。把已批准的定位和 GTM 材料变成一门数字人互动销售赋能课程，只承载已批准的主张，并按需回答销售的问题。客户名称、竞争优势和业绩结果绝不编造。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-sales-enablement-training-zh-cn
+```
+
+### 员工 Onboarding
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+每个新员工都问同样的第一周问题，HR 一个一个回答。把员工手册和入职计划变成一门数字人互动员工 Onboarding 课程，让新员工 ramp，并按需回答问题。个案的劳动、薪酬或法律问题永远回到 HR——课程绝不即兴解读。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-employee-onboarding-zh-cn
+```
+
+### SOP 与流程培训
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+SOP 被翻一遍就忘——直到有人跳过一个步骤。把 SOP 和制度文件变成一门数字人互动流程培训课程，严格按原文教程序，对照来源回答问题。课程永远标明所教授的 SOP 版本，绝不替代现场监督、执照或签署。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-sop-process-training-zh-cn
+```
+
+### 开发者 Onboarding
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+开发者会放弃不能快速返回首次成功的 API。把 API 文档和 SDK 指南变成一门数字人互动开发者快速上手课程，带他们从凭据走到首次成功调用——代码严格按文档承载，绝不即兴。版本标明、保持可问，教程能回答文档回答不了的追问。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-developer-quickstart-zh-cn
+```
+
+### 合作伙伴 Onboarding
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+伙伴会复述你材料里的话——对他们的客户，在公开场合。把已批准的伙伴项目材料变成一门数字人互动伙伴培训课程，严格按批准的版本教产品故事、成交流程和规则，并按需回答伙伴问题。佣金、区域和收益绝不做超出批准的承诺。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-partner-training-zh-cn
+```
+
+### 新生 Orientation
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+每一届新生都问同样的问题，学生服务处答一整个学期。把学生手册和 Orientation 材料变成一门数字人互动新生 Orientation 课程，开学前就让新生准备好，之后保持可问。费用、签证、住宿和政策只来自你的文件——绝不编造。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-student-orientation-zh-cn
+```
+
+### 合规培训
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+没人读的合规培训，会变成没人想要的事故。把制度和法规材料变成一门数字人互动合规培训课程，让员工真的能提问——义务严格按来源文件承载。课程绝不声称自己就是法律合规、认证或专业意见；权威永远在你的来源。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-compliance-training-zh-cn
+```
+
+### 安全意识培训
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+员工就是攻击面，一份被扫一眼的制度 PDF 改变不了行为。把安全制度变成一门数字人互动安全意识培训课程，建立识别和上报条件反射——并按需回答员工问题。诚实设计：意识降低风险，绝不声称消除风险。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-security-awareness-training-zh-cn
+```
+
+### 互动 Lead Magnet
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+大多数引流磁铁是被下载后遗忘的 PDF。做一门数字人互动引流磁铁——一门交付真实独立价值、订阅后仍能回答问题的免费小课。不要虚假稀缺，不要编造结果：把你的专业，教到足以赢得名单。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-lead-magnet-zh-cn
+```
+
+### 销售入职培训
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+新销售遇到什么就用什么 ramp——包括没人批准过的主张。把销售手册变成一门数字人互动销售入职课程，用已批准的故事、流程和证据带新销售 ramp，在上战场前回答问题。窄守新销售 ramp；更广的就绪需求归销售赋能。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-sales-onboarding-zh-cn
+```
+
+### 录制知识转互动课程
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+你最好的研讨会已经回答过那些问题——一次。把录像、视频和文稿再利用成一门数字人互动课程，在直播结束很久之后继续教学、保持可问。临场无据说法被剔除，旧内容诚实标注时效，课程是这场分享的最好版本。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-content-repurposing-zh-cn
+```
+
+### 产品变化采用
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+没人理解的产品更新会变成流失，不是采用。把发布说明和迁移文档变成一门数字人互动采用课程，讲清变了什么、影响谁、什么时候之前做什么。兼容性、价格和迁移结果只按已批准材料承载——绝不承诺。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-product-change-adoption-zh-cn
+```
+
+### 报告转决策简报
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+报告被扫一眼图、永远被错引。把白皮书或基准报告变成一门数字人互动简报课程，结论带着方法和局限一起教——并回答 PDF 回答不了的受众问题。不做因果跳跃，不做超出报告的预测。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-report-briefing-zh-cn
+```
+
+### 会员与社区 Start Here
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+新会员加入、潜水、离开——因为没人教过他们怎么融入。把社区守则和欢迎材料变成一门数字人互动 Onboarding 课程，把新会员变成会参与的会员，欢迎帖沉了之后依然可问。权益、规则和访问只来自你的文件。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-community-onboarding-zh-cn
+```
+
+### 内部变化采用
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+员工听完全员会，还是会问：对我意味着什么？把已批准的变革沟通材料变成一门数字人互动内部变革采用课程，回答大家不愿公开问的问题。不推测岗位或未来：只承载已沟通的内容，包括诚实说明哪些还没定论。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-internal-change-adoption-zh-cn
+```
+
+### 终端用户软件培训
+
+Market variant: `zh-cn` (`zh-CN`, Mainland China)
+
+终端用户跟旁边同事学系统——他们的错误变成你的支持队列。把培训指南变成一门数字人互动终端用户软件培训课程，按文档里的真实流程一步步带。界面、权限和点击路径只来自你的指南；课程绝不编造界面。
+
+```bash
+npx skills add personwiseai/skills --skill personwise-end-user-software-training-zh-cn
+```
+
 Each Skill is bound to one PersonWise market and includes pinned user-local CLI bootstrap assets.
 A course-creation request authorizes its requested course count and normal existing-credit use;
 authentication uses browser OAuth and credentials never belong in this repository.
 
 ## Current release
 
-- Bundle: `2.1.4`
-- Tag: `v2.1.4-en`
-- Core Skill: `personwise-create-course` `2.1.4`
+- Bundle: `2.1.5`
+- Tag: `v2.1.5`
+- Core Skill: `personwise-create-course` `2.1.5`
 - Install page: https://personwise.ai/skills/personwise-create-course
 - Support: support@personwise.ai
 - Privacy: https://personwise.ai/privacy

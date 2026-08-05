@@ -56,7 +56,7 @@ Include this optional telemetry only when supported:
 {
   "skill_invocation": {
     "skill_id": "personwise-interactive-product-explainer",
-    "skill_version": "2.1.4"
+    "skill_version": "2.1.5"
   }
 }
 ```
@@ -68,6 +68,14 @@ allocation as completion.
 
 Upload each file the user named, attached, or selected with `source add`, then reconcile
 `source status`. Those files and images need no extra approval. An Agent-discovered local file does.
+
+Do not call `run advance` while any source is `pending` or `processing`: the run stays at
+`awaiting_sources` and advancing is a 200 no-op until every declared source is canonically `ready`.
+Keep bounded `run wait` and `source status`; server-orchestrated runs auto-continue once sources
+complete. `source status` reports the upload ticket lifecycle as `ticket_status` (`consumed`
+means the upload was received, not that processing is done); the canonical `status` field is
+the source processing state (`pending`, `processing`, `ready`, or `failed`), with `phase`,
+`processed_pages`/`total_pages`, and a safe `error` when failed. Only `ready` permits advancing.
 
 Use bounded `run wait`, then fresh `run get` and `course snapshot` reads. `run wait` returns on a
 terminal status and at review checkpoints (`paused`); on older CLI releases it returns only on
@@ -92,4 +100,5 @@ playability.
 After timeout or an ambiguous response, read state and reuse the same logical idempotency identity.
 Use `run retry` only when fresh state allows it, honor `Retry-After`, and never parallel-hammer a
 run. Stop for structured authentication, credit, authorization-limit, or unsupported-operation
-errors and report only the returned safe action.
+errors and report only the returned safe action. A failed run exposes the safe `error` through
+`run get`, and a blocked publish returns `requirements`; report them exactly as returned.

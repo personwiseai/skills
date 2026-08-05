@@ -77,7 +77,8 @@ The required quality gates are:
 1. Build the claim ledger from the strongest current sources.
 2. Submit one structured `course create` request with the resolved slide count and a stable logical
    idempotency identity.
-3. Upload every retained strict source through `source add`, then reconcile status.
+3. Upload every retained strict source through `source add`, then reconcile status. Do not call
+   `run advance` while any source is `pending` or `processing`.
 4. At Outline, check each page's teaching job, factual coverage, and exclusions; make only objective
    revision-bound corrections.
 5. At Script, audit every `title`, `key_points`, `page_text`, and `script` against the claim ledger;

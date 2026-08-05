@@ -2,12 +2,5 @@ interface:
   display_name: 内部变化采用
   short_description: 把变革沟通材料变成数字人讲解的互动采用课程，学员可随时语音提问
   default_prompt: 使用 $personwise-internal-change-adoption-zh-cn，根据这些资料制作一门内部变革采用课程。
-dependencies:
-  tools:
-  - type: mcp
-    value: personwise-course-creation-cn
-    description: 通过中国区 OAuth 创建并发布 PersonWise 课程
-    transport: streamable_http
-    url: https://mcp.personwise.cn/mcp
 policy:
   allow_implicit_invocation: true
