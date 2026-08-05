@@ -163,7 +163,8 @@ Agent 自己发现的本地文件必须先说明精确文件和用途并取得�
 `source status` 会同时返回上传票据生命周期（`ticket_status`：`consumed` 仅表示上传已被接收
 并开始处理，不代表完成）与规范来源 `status`（`pending`、`processing`、`ready` 或 `failed`），
 以及 `phase`、`processed_pages`/`total_pages` 和失败时的安全 `error`；只有 `status: ready`
-才允许推进。
+才允许推进。在同步窗口内，较旧的服务端可能短暂返回 `course_agent_sources_not_ready` 冲突
+而不是 no-op；此时应重新读取 `run get`/`source status` 并继续等待，不要取消或另建 run。
 
 ### 审阅持久检查点
 

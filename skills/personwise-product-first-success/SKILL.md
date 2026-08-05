@@ -53,7 +53,7 @@ When `supports_skill_invocation_attribution=true`, include:
 {
   "skill_invocation": {
     "skill_id": "personwise-product-first-success",
-    "skill_version": "2.1.5"
+    "skill_version": "2.1.6"
   }
 }
 ```
@@ -201,7 +201,9 @@ call `run advance` only after a fresh read shows every source `ready`.
 upload was received and processing started, not that the source is complete); the canonical
 `status` field is the source processing state (`pending`, `processing`, `ready`, or `failed`),
 with `phase`, `processed_pages`/`total_pages`, and a safe `error` when failed. Only `ready`
-permits advancing.
+permits advancing. During the sync window an older server may briefly return a
+`course_agent_sources_not_ready` conflict instead of a no-op; read fresh `run get`/`source status`
+and keep waiting rather than cancelling or creating a replacement run.
 
 ### Review the durable checkpoints
 

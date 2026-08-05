@@ -19,7 +19,10 @@ Windows:     assets/bootstrap.ps1 --approve-install
 不要把 `doctor` 当作前置条件。只有结构化错误建议 `run_doctor` 时才运行；默认只读，除非用户
 明确要求写诊断包。
 
-## 保持 CLI 与本 Skill 为最新版本
+## 更新纪律 —— 保持 CLI 与本 Skill 为最新版本
+
+这是常设纪律，不是可选的维护动作：技能与 CLI 是一个受治理的整体，任何业务命令之前都必须
+保持二者对齐。
 
 PersonWise 会持续发布 Skill 与 CLI 更新。每个成功的 CLI 响应可能携带顶层 `updates` 块，按以下
 确定规则处理：
@@ -35,7 +38,12 @@ PersonWise 会持续发布 Skill 与 CLI 更新。每个成功的 CLI 响应可�
 `<skill-directory>` 替换为本 Skill 的安装目录（即本 Skill 的 SKILL.md 所在目录）。不得为了检查
 新版本而运行 `doctor` 或任何前置检查清单；每会话最多询问一次；不得用其他命令、参数、来源或下载
 路径替换打印的 `action`。若 CLI 对 `personwise update` 报 `Unknown command`，说明当前 CLI 旧于
-本 Skill 的更新工具：停止并告知用户从官方列表重新安装本 Skill。
+本 Skill 的更新工具：改用本 Skill 自带的固定引导脚本升级 CLI（Linux/macOS 为
+`assets/bootstrap.sh --approve-upgrade`，Windows 为 `assets/bootstrap.ps1 --approve-upgrade`；
+没有可识别安装时用 `--approve-install`），然后重试失败的步骤一次。仅重新安装 Skill 不会升级
+CLI。若已安装 CLI 旧于引导脚本锁定的版本时服务返回 `SERVICE_RESPONSE_MISMATCH`，应先用固定
+引导脚本升级 CLI 并重试一次；只有当前锁定版本的 CLI 仍然不匹配时才报告
+`stop_and_verify_service`。
 
 ## 通过浏览器授权
 

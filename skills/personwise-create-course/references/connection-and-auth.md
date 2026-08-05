@@ -21,7 +21,10 @@ or use another origin.
 Do not run `doctor` as a prerequisite. Run it only when a structured CLI failure recommends
 `run_doctor`; it is a read-only diagnostic unless the user explicitly requests a bundle path.
 
-## Keep the CLI and this Skill current
+## Update discipline — keep the CLI and this Skill current
+
+This is a standing discipline, not optional maintenance: the Skill and the CLI are one governed
+pair and must stay aligned before any business command.
 
 PersonWise ships Skill and CLI updates continuously. Every successful CLI response may carry a
 top-level `updates` block. Handle it deterministically:
@@ -40,8 +43,13 @@ When the `action` is `personwise update skill --at <skill-directory> --approve-u
 Skill's SKILL.md). Never run `doctor` or any preflight checklist just to check freshness, never
 ask more than once per session, and never substitute another command, flag, origin, or download
 path for the printed `action`. If the CLI answers `Unknown command` for `personwise update`, the
-installed CLI predates this Skill's update tooling: stop and tell the user to reinstall the Skill
-from its official listing.
+installed CLI predates this Skill's update tooling: upgrade the CLI with this Skill's bundled
+bootstrap instead (`assets/bootstrap.sh --approve-upgrade` on Linux/macOS,
+`assets/bootstrap.ps1 --approve-upgrade` on Windows; use `--approve-install` when no recognized
+executable exists), then retry the failed step once. Reinstalling the Skill alone does not update
+the CLI. If the service returns `SERVICE_RESPONSE_MISMATCH` while the installed CLI is older than
+the bootstrap-pinned version, upgrade the CLI through the bundled bootstrap first and retry the
+failed command once; only report `stop_and_verify_service` when the current pinned CLI still fails.
 
 ## Authenticate through the browser
 

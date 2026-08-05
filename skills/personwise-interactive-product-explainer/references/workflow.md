@@ -56,7 +56,7 @@ Include this optional telemetry only when supported:
 {
   "skill_invocation": {
     "skill_id": "personwise-interactive-product-explainer",
-    "skill_version": "2.1.5"
+    "skill_version": "2.1.6"
   }
 }
 ```
