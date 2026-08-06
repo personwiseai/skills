@@ -44,16 +44,16 @@ personwise update check --service personwise.cn --json
   才能继续。说明原因，请求批准，原样执行打印的更新命令，然后重试失败的步骤一次。
 - 两者都过旧时，先升级 CLI，再升级技能。
 
-当 `action` 为 `personwise update skill --at <skill-directory> --approve-upgrade` 时，把
-`<skill-directory>` 替换为本 Skill 的安装目录（即本 Skill 的 SKILL.md 所在目录）。不得为了检查
-新版本而运行 `doctor` 或通用能力前置清单；上面的 `update check` 就是新鲜度检查。每个组件每
-会话最多询问一次；不得用其他命令、参数、来源或下载路径替换打印的 `action`。若 CLI 对
-`personwise update` 报 `Unknown command`，说明当前 CLI 旧于本 Skill 的更新工具：改用本 Skill
-自带的固定引导脚本升级 CLI（Linux/macOS 为 `assets/bootstrap.sh --approve-upgrade`，Windows
-为 `assets/bootstrap.ps1 --approve-upgrade`；没有可识别安装时用 `--approve-install`），然后
-重试失败的步骤一次。仅重新安装 Skill 不会升级 CLI。若已安装 CLI 旧于引导脚本锁定的版本时服务
-返回 `SERVICE_RESPONSE_MISMATCH`，应先用固定引导脚本升级 CLI 并重试一次；只有当前锁定版本的
-CLI 仍然不匹配时才报告 `stop_and_verify_service`。
+当打印的 `action` 刷新本已安装 Skill 时，把 `<skill-directory>` 替换为本 Skill 的安装目录
+（即本 Skill 的 SKILL.md 所在目录）。不得为了检查新版本而运行 `doctor` 或通用能力前置清单；
+上面的 `update check` 就是新鲜度检查。每个组件每会话最多询问一次；不得用其他命令、参数、
+来源或下载路径替换打印的 `action`。若 CLI 对 `personwise update` 报 `Unknown command`，说明
+当前 CLI 旧于本 Skill 的更新工具：改用本 Skill 自带的固定引导脚本升级 CLI（Linux/macOS 为
+`assets/bootstrap.sh --approve-upgrade`，Windows 为 `assets/bootstrap.ps1 --approve-upgrade`；
+没有可识别安装时用 `--approve-install`），然后重试失败的步骤一次。仅重新安装 Skill 不会升级
+CLI。若已安装 CLI 旧于引导脚本锁定的版本时服务返回 `SERVICE_RESPONSE_MISMATCH`，应先用固定
+引导脚本升级 CLI 并重试一次；只有当前锁定版本的 CLI 仍然不匹配时才报告
+`stop_and_verify_service`。
 
 ## 通过浏览器授权
 

@@ -3,4 +3,4 @@ interface:
   short_description: 把社区守则变成数字人讲解的互动入门课程，学员可随时语音提问
   default_prompt: 使用 $personwise-community-onboarding-zh-cn，根据这些资料制作一门社区入门课程。
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

@@ -3,4 +3,4 @@ interface:
   short_description: Turn approved messaging into an askable digital-human sales-readiness course.
   default_prompt: Use $personwise-sales-enablement-training to build a sales readiness course from our launch materials.
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

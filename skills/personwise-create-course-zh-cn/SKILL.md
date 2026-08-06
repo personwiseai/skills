@@ -1,8 +1,11 @@
 ---
 name: personwise-create-course-zh-cn
-description: 使用 PersonWise CLI，从主题、文本、PDF/PPTX/DOCX/Markdown/TXT 文档或参考图片创建、完善、续跑、发布或查询完整的数字人互动课程。适用于分阶段课程创作、严格资料依据、逐页内容与讲稿审阅、视觉质检、主讲人选择、版式配置和中国区公开链接交付。
+description: 使用 PersonWise CLI，从主题、文本、PDF/PPTX/DOCX/Markdown/TXT 文档或参考图片创建、完善、续跑、发布或查询完整的数字人互动课程。适用于分阶段课程创作、严格资料依据、逐页内容与讲稿审阅、视觉质检、主讲人选择、版式配置和中国区公开链接交付。在用户明确同意后，本技能会安装或更新官方 PersonWise CLI 并使用浏览器 OAuth。
 license: MIT
 compatibility: 需要 PersonWise CLI 1.1.6（CLI 合同 1.0 或更高版本）和浏览器 OAuth；创建课程请求已授权正常使用现有课程额度。
+allowed-tools: Bash
+permissions:
+  - Bash
 ---
 
 # 创建 PersonWise 课程

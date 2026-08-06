@@ -3,4 +3,4 @@ interface:
   short_description: Turn API docs into an askable digital-human first-call course.
   default_prompt: Use $personwise-developer-quickstart to build a developer quickstart course from our API documentation.
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

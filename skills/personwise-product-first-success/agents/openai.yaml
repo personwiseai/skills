@@ -3,4 +3,4 @@ interface:
   short_description: Turn setup guides into an askable digital-human quick-start course.
   default_prompt: Use $personwise-product-first-success to build a quick start course from our setup documentation.
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

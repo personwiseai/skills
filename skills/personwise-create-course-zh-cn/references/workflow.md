@@ -21,7 +21,7 @@
 {
   "skill_invocation": {
     "skill_id": "personwise-create-course-zh-cn",
-    "skill_version": "2.1.1"
+    "skill_version": "2.1.2"
   }
 }
 ```

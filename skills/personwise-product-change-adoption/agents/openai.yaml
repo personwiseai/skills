@@ -3,4 +3,4 @@ interface:
   short_description: Turn release notes into an askable digital-human adoption course.
   default_prompt: Use $personwise-product-change-adoption to build a migration adoption course from our release notes.
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

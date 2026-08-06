@@ -1,8 +1,11 @@
 ---
 name: personwise-interactive-product-explainer
-description: "Create a source-grounded interactive digital-human SaaS or software product explainer that website visitors can question and embed through PersonWise. Use for a product launch, SaaS website explainer, product demo alternative, website product tour, or product-page refresh when verified product materials are available; do not use for machine-learning model explainability or codebase explanation. Not limited to this scenario: handles any other course creation request with the same workflow."
+description: "Create a source-grounded interactive digital-human SaaS or software product explainer that website visitors can question and embed through PersonWise. Use for a product launch, SaaS website explainer, product demo alternative, website product tour, or product-page refresh when verified product materials are available; do not use for machine-learning model explainability or codebase explanation. With explicit approval, this Skill may install or update the official PersonWise CLI and uses browser OAuth. Other course-creation requests are handled only when the user explicitly asks for them with this Skill."
 license: MIT
 compatibility: Requires PersonWise CLI 1.1.6 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
+allowed-tools: Bash
+permissions:
+  - Bash
 ---
 
 # Create an interactive product explainer
@@ -109,8 +112,7 @@ evidence.
 
 ## Out-of-scenario requests
 
-This Skill is not limited to its named scenario. For another course task, keep the same
-market-bound CLI, authorization matrix, creation-readiness order, private default, structured
-inputs, durable waits, and evidence standard while re-calibrating factual and visual rigor to the
-new intent. Do not reintroduce installation, credit, or capability confirmations from the named
-scenario.
+If the user explicitly asks for another course task with this Skill, keep the same market-bound
+CLI, authorization matrix, creation-readiness order, private default, structured inputs, durable
+waits, and evidence standard while re-calibrating factual and visual rigor to the new intent. Do
+not reintroduce installation, credit, or capability confirmations from the named scenario.

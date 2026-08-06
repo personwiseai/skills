@@ -3,4 +3,4 @@ interface:
   short_description: 把 Orientation 材料变成数字人讲解的互动新生课程，学员可随时语音提问
   default_prompt: 使用 $personwise-student-orientation-zh-cn，根据这些资料制作一门新生 Orientation 课程。
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

@@ -3,4 +3,4 @@ interface:
   short_description: Give every new customer an askable digital-human onboarding course.
   default_prompt: Use $personwise-customer-onboarding to build a customer onboarding course from our onboarding materials.
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

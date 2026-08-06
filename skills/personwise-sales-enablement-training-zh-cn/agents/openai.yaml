@@ -3,4 +3,4 @@ interface:
   short_description: 把已批准话术变成数字人讲解的互动销售就绪课程，学员可随时语音提问
   default_prompt: 使用 $personwise-sales-enablement-training-zh-cn，根据这些资料制作一门销售就绪课程。
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

@@ -3,4 +3,4 @@ interface:
   short_description: Turn policies into an askable digital-human compliance course.
   default_prompt: Use $personwise-compliance-training to build a compliance training course from our policy documents.
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

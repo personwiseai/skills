@@ -3,4 +3,4 @@ interface:
   short_description: 把报告变成数字人讲解的互动简报课程，观众可随时语音提问
   default_prompt: 使用 $personwise-report-briefing-zh-cn，根据这些资料制作一门报告简报课程。
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

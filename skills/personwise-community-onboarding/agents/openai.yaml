@@ -3,4 +3,4 @@ interface:
   short_description: Turn community guidelines into an askable digital-human start-here course.
   default_prompt: Use $personwise-community-onboarding to build a community onboarding course from our guidelines.
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

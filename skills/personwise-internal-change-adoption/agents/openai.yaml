@@ -3,4 +3,4 @@ interface:
   short_description: Turn change communications into an askable digital-human adoption course.
   default_prompt: Use $personwise-internal-change-adoption to build an internal change adoption course from our rollout communications.
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

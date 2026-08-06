@@ -1,8 +1,11 @@
 ---
 name: personwise-create-course
-description: Create, refine, resume, publish, or query polished PersonWise courses from topics, text, PDF/PPTX/DOCX/Markdown/TXT documents, or reference images with the PersonWise CLI. Use for staged course authoring, source-grounded lessons, slide and narration review, visual QA, presenter selection, layout configuration, link sharing, or Topics review submission.
+description: Create, refine, resume, publish, or query polished PersonWise courses from topics, text, PDF/PPTX/DOCX/Markdown/TXT documents, or reference images with the PersonWise CLI. With explicit approval, this Skill may install or update the official PersonWise CLI and uses browser OAuth. Use for staged course authoring, source-grounded lessons, slide and narration review, visual QA, presenter selection, layout configuration, link sharing, or Topics review submission.
 license: MIT
 compatibility: Requires PersonWise CLI 1.1.6 with contract 1.0 or newer and browser OAuth; a course-creation request authorizes its normal existing-credit use.
+allowed-tools: Bash
+permissions:
+  - Bash
 ---
 
 # Create a PersonWise course
@@ -124,7 +127,7 @@ creation:
 {
   "skill_invocation": {
     "skill_id": "personwise-create-course",
-    "skill_version": "2.1.8"
+    "skill_version": "2.1.9"
   }
 }
 ```

@@ -3,4 +3,4 @@ interface:
   short_description: 把发布说明变成数字人讲解的互动产品更新课程，观众可随时语音提问
   default_prompt: 使用 $personwise-product-change-adoption-zh-cn，根据这些资料制作一门产品迁移采用课程。
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

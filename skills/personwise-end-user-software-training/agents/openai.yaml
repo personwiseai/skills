@@ -3,4 +3,4 @@ interface:
   short_description: Turn training guides into an askable digital-human end-user course.
   default_prompt: Use $personwise-end-user-software-training to build end-user training for our CRM from our training guides.
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

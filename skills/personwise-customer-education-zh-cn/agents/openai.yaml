@@ -3,4 +3,4 @@ interface:
   short_description: 把支持知识变成数字人讲解的互动客户课程，学员可随时语音提问
   default_prompt: 使用 $personwise-customer-education-zh-cn，根据这些资料制作一门客户教育课程。
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

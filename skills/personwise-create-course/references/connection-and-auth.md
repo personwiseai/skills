@@ -48,19 +48,19 @@ successful CLI response may also carry a top-level `updates` block. Handle it de
   printed update command, then retry the failed step once.
 - When both are outdated, update the CLI first, then the Skill.
 
-When the `action` is `personwise update skill --at <skill-directory> --approve-upgrade`, replace
-`<skill-directory>` with the directory of this installed Skill (the directory containing this
-Skill's SKILL.md). Never run `doctor` or a generic capability preflight to check freshness; the
-`update check` command above is the freshness check. Never ask more than once per component per
-session, and never substitute another command, flag, origin, or download path for the printed
-`action`. If the CLI answers `Unknown command` for `personwise update`, the installed CLI
-predates this Skill's update tooling: upgrade the CLI with this Skill's bundled bootstrap
-instead (`assets/bootstrap.sh --approve-upgrade` on Linux/macOS,
-`assets/bootstrap.ps1 --approve-upgrade` on Windows; use `--approve-install` when no recognized
-executable exists), then retry the failed step once. Reinstalling the Skill alone does not update
-the CLI. If the service returns `SERVICE_RESPONSE_MISMATCH` while the installed CLI is older than
-the bootstrap-pinned version, upgrade the CLI through the bundled bootstrap first and retry the
-failed command once; only report `stop_and_verify_service` when the current pinned CLI still fails.
+When the printed `action` refreshes this installed Skill, replace `<skill-directory>` with the
+directory of this installed Skill (the directory containing this Skill's SKILL.md). Never run
+`doctor` or a generic capability preflight to check freshness; the `update check` command above is
+the freshness check. Never ask more than once per component per session, and never substitute
+another command, flag, origin, or download path for the printed `action`. If the CLI answers
+`Unknown command` for `personwise update`, the installed CLI predates this Skill's update tooling:
+upgrade the CLI with this Skill's bundled bootstrap instead
+(`assets/bootstrap.sh --approve-upgrade` on Linux/macOS, `assets/bootstrap.ps1 --approve-upgrade`
+on Windows; use `--approve-install` when no recognized executable exists), then retry the failed
+step once. Reinstalling the Skill alone does not update the CLI. If the service returns
+`SERVICE_RESPONSE_MISMATCH` while the installed CLI is older than the bootstrap-pinned version,
+upgrade the CLI through the bundled bootstrap first and retry the failed command once; only report
+`stop_and_verify_service` when the current pinned CLI still fails.
 
 ## Authenticate through the browser
 
